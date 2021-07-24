@@ -15,11 +15,12 @@ using namespace std;
 #define ESC 6
 
 //함수 정의
-
+void Map();
 void Title();
 int Menu();
 void StartGame();
 int keyControl();
+
 
 
 //전역변수
@@ -136,7 +137,7 @@ void Title() {
           }
      }
     
-
+  
 
 //게임실행화면
 void StartGame() {
@@ -148,7 +149,6 @@ void StartGame() {
     string str[5] = { "←","→","↑","↓" };
 
     //맵지정
-    int map[4] = { 10,20,30,40 };
 
     int x = 5; int y = 5; //문제 위치
     //시작지점
@@ -157,19 +157,62 @@ void StartGame() {
     cout << "Start" << endl;
 
     for (int j = 1; j <= 40; j++) {  //문제 실행
-        int rn = (rand() % 4);
-        if (j >= 20) {
-            gotoxy(x, y--);
-            cout << str[rn] << endl;
+        int rn = (rand() % 4); //문재 랜덤
+        int map = 3;
+
+        //map 1
+        if (map == 1) {
+            if (j < 20) {
+                gotoxy(x++, y);  cout << str[rn] << endl;
+            }
+            else if (j < 32) {
+                gotoxy(x--, y++);  cout << str[rn] << endl;
+            }
+            else if (j >= 32) {
+                gotoxy(x++, y); cout << str[rn] << endl;
+            }
         }
-        else
-        gotoxy(x++, y++);   cout << str[rn] << endl;
+
+        //map2
+        else if (map == 2) {
+            if (j < 20) {
+                gotoxy(x++, y);  cout << str[rn] << endl;
+            }
+            else if (j < 30) {
+                gotoxy(x, y++);  cout << str[rn] << endl;
+            }
+            else if (j <= 40) {
+                gotoxy(x--, y); cout << str[rn] << endl;
+            }
+        }
+
+        //map3
+        else  if (map == 3) {
+            if (j < 15) {
+                gotoxy(x, y++);  cout << str[rn] << endl;
+            }
+            else if (j < 30) {
+                gotoxy(x++, y--);  cout << str[rn] << endl;
+            }
+            else if (j <= 40) {
+                gotoxy(x++, y); cout << str[rn] << endl;
+            }
+        }
+
+        
+
 
         //골 지점
         if (j == 40) { gotoxy(x, y);  cout << "GOAL" << endl; }
       
     }
     system("pause>null");
+}
+
+void Map(int j) {
+
+
+
 }
 
 //게임설명
