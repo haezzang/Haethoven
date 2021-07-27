@@ -19,12 +19,14 @@ void Map();
 void Title();
 int Menu();
 void StartGame();
+void Record();
 int keyControl();
 
 
 
 //전역변수
 string name;
+int score = 0;
 
 //좌표함수
 void gotoxy(int x, int y)
@@ -36,12 +38,14 @@ void gotoxy(int x, int y)
 }
 
 
+
+
 //키보드 입력 제어
 int keyControl() {
     char c;
     while (1) {
-        if (_kbhit()) {               
-            c = _getch();          
+        if (_kbhit()) {
+            c = _getch();
             if (c == -32) {
                 c = _getch();
                 switch (c) {
@@ -55,11 +59,11 @@ int keyControl() {
                     return RIGHT; break;
                 }
             }
-            else if(c==' ')
-                return SPACE; 
-            }
+            else if (c == ' ')
+                return SPACE;
         }
     }
+}
 
 
 
@@ -104,61 +108,79 @@ void Title() {
 }
 
 //메뉴제어
-    int Menu() {
-        int x = 24;
-        int y = 15;
-        gotoxy(x-1, y);
-        cout << "> 게 임 시 작" << endl;
-        gotoxy(x, y+2);
-        cout << "랭 킹 보 기" << endl;
-        gotoxy(x, y+4);
-        cout << "게 임 종 료" << endl;
-        while (1) {
-            int n = keyControl();
-            switch (n){         
-            case UP: {
-                if (y > 15) {
-                    gotoxy(x - 1, y); printf("  ");
-                    gotoxy(x - 1, y-=2); printf(">");
-                }
-                break;
+int Menu() {
+    int x = 24;
+    int y = 15;
+    gotoxy(x - 1, y);
+    cout << "> 게 임 시 작" << endl;
+    gotoxy(x, y + 2);
+    cout << "랭 킹 보 기" << endl;
+    gotoxy(x, y + 4);
+    cout << "게 임 종 료" << endl;
+    while (1) {
+        int n = keyControl();
+        switch (n) {
+        case UP: {
+            if (y > 15) {
+                gotoxy(x - 1, y); printf("  ");
+                gotoxy(x - 1, y -= 2); printf(">");
             }
-            case DOWN : {
-                if (y < 19) {
-                    gotoxy(x - 1, y); printf("  ");
-                    gotoxy(x - 1, y+=2); printf(">");
-                }
-                break;
+            break;
+        }
+        case DOWN: {
+            if (y < 19) {
+                gotoxy(x - 1, y); printf("  ");
+                gotoxy(x - 1, y += 2); printf(">");
             }
-            case SPACE: {
-                return y - 15;
-                }
-            }
-          }
-     }
-    
-  
+            break;
+        }
+        case SPACE: {
+            return y - 15;
+        }
+        }
+    }
+}
 
+//점수판과 제한시간
+void Record() {
+    gotoxy(35, 4);
+    cout << name << "님의 기록판" << endl;
+    gotoxy(35, 5);
+    cout << " ____________________________" << endl;
+    gotoxy(40, 8);
+    cout << "S C O R E" << endl;
+    gotoxy(40, 9);
+    cout << score << "점" << endl;
+
+    gotoxy(40, 11);
+    cout << "제한시간" << endl;
+    gotoxy(40, 12);
+    cout << "TIME" << endl;
+    gotoxy(35, 20);
+    cout << " ____________________________" << endl;
+}
 //게임실행화면
 void StartGame() {
-    system("cls"); 
+    system("cls");
     srand((int)time(0));     //문제 중복방지
 
-    
+    Record();
+    //목숨
+    gotoxy(4, 3);  cout << "♥ ♥ ♥" << endl;
+
     //방향
-    string str[5] = { "←","→","↑","↓" };
+    string str[4] = { "←","→","↑","↓" };
 
-    //맵지정
+    int c = keyControl(); //입력값
+    int x = 5; int y = 5; //초기 위치
 
-    int x = 5; int y = 5; //문제 위치
     //시작지점
-
-    gotoxy(x-1, y-1);
+    gotoxy(x - 1, y - 1);
     cout << "Start" << endl;
 
+    int map = (rand() % 3) + 1;//맵 랜덤
     for (int j = 1; j <= 40; j++) {  //문제 실행
-        int rn = (rand() % 4); //문재 랜덤
-        int map = 3;
+        int rn = (rand() % 4); //문제 랜덤
 
         //map 1
         if (map == 1) {
@@ -198,13 +220,9 @@ void StartGame() {
                 gotoxy(x++, y); cout << str[rn] << endl;
             }
         }
-
-        
-
-
         //골 지점
         if (j == 40) { gotoxy(x, y);  cout << "GOAL" << endl; }
-      
+
     }
     system("pause>null");
 }
@@ -218,14 +236,14 @@ void Map(int j) {
 //게임설명
 void Info() {
     system("cls");
-  /*  gotoxy(15, 3);
-    cout << "18세기에 베토벤이 있다면 21세기엔 해토벤이 있다?" << endl;*/
+    /*  gotoxy(15, 3);
+      cout << "18세기에 베토벤이 있다면 21세기엔 해토벤이 있다?" << endl;*/
     gotoxy(25, 5);
     cout << "<게 임 설 명>" << endl;
     gotoxy(16, 7);
     cout << "키보드 방향키 → ← ↑ ↓ 를 사용하여 점수를 올리세요! " << endl;
-    gotoxy(15, 9);
-    cout << "기회는 3번! 단계가 올라갈 수록 제한시간은 짧아집니다!" << endl;
+    gotoxy(17, 9);
+    cout << "기회는 3번! 100초 안에 많은 점수를 획득하세요!" << endl;
     gotoxy(17, 11);
     cout << "ESC를 누르면 메인화면으로 이동 할 수있습니다!" << endl;
     gotoxy(16, 13);
@@ -237,13 +255,13 @@ void Info() {
     gotoxy(24, 17);
     cout << ">";
     cin >> name;
-    StartGame();   
+    StartGame();
     system("pause>null");
 }
 
 //메인함수
 int main(void) {
-
+    // system("mode con: cols=80 lines=20"); //가로 세로 콘솔크기 추가
     while (true) {
         Title();
         switch (Menu()) {
