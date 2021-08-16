@@ -3,6 +3,7 @@
 #include<Windows.h>
 #include<conio.h>
 #include <time.h>
+#include <ctime>
 using namespace std;
 //디코딩 폰트 32
 
@@ -37,6 +38,33 @@ void gotoxy(int x, int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
 
+//글자색
+enum Color
+{
+    BLACK,
+    BLUE,
+    GREEN,
+    CYAN,
+    RED,
+    MAGENTA,
+    BROWN,
+    LIGHTGRAY,
+    DARKGRAY,
+    LIGHTBLUE,
+    LIGHTGREEN,
+    LIGHTCYAN,
+    LIGHTRED,
+    LIGHTMAGENTA,
+    YELLOW,
+    WHITE
+};
+
+
+void textcolor(int foreground, int background)
+{
+    int color = foreground + background * 16;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
 
 
 
@@ -70,6 +98,7 @@ int keyControl() {
 //타이틀
 void Title() {
     //아스키아트
+    textcolor(YELLOW, BLACK);
     gotoxy(13, 4);
     cout << " _   _   ___   _____  _____  _____  _   _  _____  _   _ " << endl;
     gotoxy(13, 5);
@@ -82,6 +111,8 @@ void Title() {
     cout << "| | | || | | || |___   | |  \\ \\_/ /\\ \\_/ /| |___ | |\\  |" << endl;
     gotoxy(13, 9);
     cout << "\\_| |_/\\_| |_/\\____/   \\_/   \\___/  \\___/ \\____/ \\_| \\_/" << endl;
+    
+    textcolor(WHITE, BLACK);
     gotoxy(32, 10);
     cout << "해토벤의 음악교실" << endl;
     gotoxy(13, 13);
@@ -149,8 +180,8 @@ void Record() {
     cout << " ____________________________" << endl;
     gotoxy(40, 8);
     cout << "S C O R E" << endl;
-
-
+    gotoxy(40, 9);
+    cout << score << "점" << endl;
     gotoxy(40, 11);
     cout << "제한시간" << endl;
     gotoxy(40, 12);
@@ -165,8 +196,11 @@ void StartGame() {
 
     Record();
     //목숨
-    gotoxy(4, 3);  cout << "♥ ♥ ♥" << endl;
 
+    textcolor(LIGHTRED, BLACK);
+    gotoxy(4, 3);   cout << "♥ ♥ ♥" << endl;
+
+    textcolor(WHITE, BLACK);
     //방향
     string str[5] = { "←","→","↑","↓","●" };
     int answer[40] = { 0, };
@@ -177,6 +211,8 @@ void StartGame() {
     gotoxy(x - 1, y - 1);
     cout << "Start" << endl;
 
+
+  
     // int map = (rand() % 3) + 1;//맵 랜덤
     for (int j = 1; j <= 40; j++) {  //문제 실행
         rn = (rand() % 5); //문제 랜덤
@@ -202,28 +238,38 @@ void StartGame() {
     }
  
 
+
+
+ 
     //정답 판단
     int a = 0;
-    while (a<40) {
-        gotoxy(40, 9);
-        cout << score << "점" << endl;
-        int n = keyControl();
-        switch (n) {
-        case LEFT:
-            if (answer[a] == 0) score += 50;  break;
-        case RIGHT:
-            if (answer[a] == 1) score += 50;  break;
-        case UP:
-            if (answer[a] == 2) score += 50;  break;
-        case DOWN:
-            if (answer[a] == 3) score += 50;  break;
-        case SPACE:
-            if (answer[a] == 4) score += 50;  break;
+    clock_t start = clock();
+    for (;;) {
+        clock_t end = clock();
+        double time = double(end - start) / CLOCKS_PER_SEC; //초단위 변환
+        gotoxy(40, 13);
+        printf("경과시간 : %0.3lf\n", time); //소수점 셋째 자리까지
+        while (a < 40) {
+
+            gotoxy(40, 9);
+            cout << score << "점" << endl;
+            int n = keyControl();
+            switch (n) {
+            case LEFT:
+                if (answer[a] == 0) score += 50;  break;
+            case RIGHT:
+                if (answer[a] == 1) score += 50;  break;
+            case UP:
+                if (answer[a] == 2) score += 50;  break;
+            case DOWN:
+                if (answer[a] == 3) score += 50;  break;
+            case SPACE:
+                if (answer[a] == 4) score += 50;  break;
+            }
+            a++;
         }
-        a++;
     }
-            
-        system("pause>null");
+       system("pause>null");
     }
 
 
