@@ -15,7 +15,7 @@ using namespace std;
 #define ESC 6
 
 //함수 정의
-void Map();
+void Info();
 void Title();
 int Menu();
 void StartGame();
@@ -149,8 +149,7 @@ void Record() {
     cout << " ____________________________" << endl;
     gotoxy(40, 8);
     cout << "S C O R E" << endl;
-    gotoxy(40, 9);
-    cout << score << "점" << endl;
+
 
     gotoxy(40, 11);
     cout << "제한시간" << endl;
@@ -169,69 +168,64 @@ void StartGame() {
     gotoxy(4, 3);  cout << "♥ ♥ ♥" << endl;
 
     //방향
-    string str[4] = { "←","→","↑","↓" };
-
+    string str[5] = { "←","→","↑","↓","●" };
+    int answer[40] = { 0, };
     int c = keyControl(); //입력값
     int x = 5; int y = 5; //초기 위치
-
+    int rn;
     //시작지점
     gotoxy(x - 1, y - 1);
     cout << "Start" << endl;
 
-    int map = (rand() % 3) + 1;//맵 랜덤
+    // int map = (rand() % 3) + 1;//맵 랜덤
     for (int j = 1; j <= 40; j++) {  //문제 실행
-        int rn = (rand() % 4); //문제 랜덤
+        rn = (rand() % 5); //문제 랜덤
+        answer[j - 1] = rn; //문제 저장
 
         //map 1
-        if (map == 1) {
-            if (j < 20) {
-                gotoxy(x++, y);  cout << str[rn] << endl;
-            }
-            else if (j < 32) {
-                gotoxy(x--, y++);  cout << str[rn] << endl;
-            }
-            else if (j >= 32) {
-                gotoxy(x++, y); cout << str[rn] << endl;
-            }
+      //  if (map == 1) {
+        if (j < 20) {
+            gotoxy(x++, y);  cout << str[rn] << endl;
+        }
+        else if (j < 32) {
+            gotoxy(x--, y++);  cout << str[rn] << endl;
+        }
+        else if (j >= 32) {
+            gotoxy(x++, y); cout << str[rn] << endl;
         }
 
-        //map2
-        else if (map == 2) {
-            if (j < 20) {
-                gotoxy(x++, y);  cout << str[rn] << endl;
-            }
-            else if (j < 30) {
-                gotoxy(x, y++);  cout << str[rn] << endl;
-            }
-            else if (j <= 40) {
-                gotoxy(x--, y); cout << str[rn] << endl;
-            }
-        }
 
-        //map3
-        else  if (map == 3) {
-            if (j < 15) {
-                gotoxy(x, y++);  cout << str[rn] << endl;
-            }
-            else if (j < 30) {
-                gotoxy(x++, y--);  cout << str[rn] << endl;
-            }
-            else if (j <= 40) {
-                gotoxy(x++, y); cout << str[rn] << endl;
-            }
-        }
+
         //골 지점
         if (j == 40) { gotoxy(x, y);  cout << "GOAL" << endl; }
 
     }
-    system("pause>null");
-}
+ 
 
-void Map(int j) {
+    //정답 판단
+    int a = 0;
+    while (a<40) {
+        gotoxy(40, 9);
+        cout << score << "점" << endl;
+        int n = keyControl();
+        switch (n) {
+        case LEFT:
+            if (answer[a] == 0) score += 50;  break;
+        case RIGHT:
+            if (answer[a] == 1) score += 50;  break;
+        case UP:
+            if (answer[a] == 2) score += 50;  break;
+        case DOWN:
+            if (answer[a] == 3) score += 50;  break;
+        case SPACE:
+            if (answer[a] == 4) score += 50;  break;
+        }
+        a++;
+    }
+            
+        system("pause>null");
+    }
 
-
-
-}
 
 //게임설명
 void Info() {
