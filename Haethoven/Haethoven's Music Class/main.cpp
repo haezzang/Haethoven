@@ -23,6 +23,9 @@ void StartGame();
 void Record();
 int keyControl();
 void Stage1(int);
+void Stage2(int);
+void GameOver();
+int main();
 
 
 
@@ -34,6 +37,9 @@ int answer[40] = { 0, }; //답체크
 int x = 5; int y = 5; //초기 위치
 int rn; //문제 랜덤
 int hcnt = 0; //실수 횟수
+
+
+
 
 //좌표함수
 void gotoxy(int x, int y)
@@ -105,39 +111,39 @@ int keyControl() {
 void Title() {
     //아스키아트
     textcolor(YELLOW, BLACK);
-    gotoxy(13, 4);
+    gotoxy(11, 4);
     cout << " _   _   ___   _____  _____  _____  _   _  _____  _   _ " << endl;
-    gotoxy(13, 5);
+    gotoxy(11, 5);
     cout << "| | | | / _ \\ |  ___||_   _||  _  || | | ||  ___|| \\ | |" << endl;
-    gotoxy(13, 6);
+    gotoxy(11, 6);
     cout << "| |_| |/ /_\\ \\| |__    | |  | | | || | | || |__  |  \\| |" << endl;
-    gotoxy(13, 7);
+    gotoxy(11, 7);
     cout << "|  _  ||  _  ||  __|   | |  | | | || | | ||  __| | . ` |" << endl;
-    gotoxy(13, 8);
+    gotoxy(11, 8);
     cout << "| | | || | | || |___   | |  \\ \\_/ /\\ \\_/ /| |___ | |\\  |" << endl;
-    gotoxy(13, 9);
+    gotoxy(11, 9);
     cout << "\\_| |_/\\_| |_/\\____/   \\_/   \\___/  \\___/ \\____/ \\_| \\_/" << endl;
     
     textcolor(WHITE, BLACK);
-    gotoxy(32, 10);
+    gotoxy(31, 10);
     cout << "해토벤의 음악교실" << endl;
-    gotoxy(13, 13);
+    gotoxy(11, 13);
     cout << " _____________________________________________________" << endl;
-    gotoxy(13, 14);
+    gotoxy(11, 14);
     cout << "|                                                     |" << endl;
-    gotoxy(13, 15);
+    gotoxy(11, 15);
     cout << "|                                                     |" << endl;
-    gotoxy(13, 16);
+    gotoxy(11, 16);
     cout << "|                                                     |" << endl;
-    gotoxy(13, 17);
+    gotoxy(11, 17);
     cout << "|                                                     |" << endl;
-    gotoxy(13, 18);
+    gotoxy(11, 18);
     cout << "|                                                     |" << endl;
-    gotoxy(13, 19);
+    gotoxy(11, 19);
     cout << "|                                                     |" << endl;
-    gotoxy(13, 20);
+    gotoxy(11, 20);
     cout << "|                                                     |" << endl;
-    gotoxy(13, 21);
+    gotoxy(11, 21);
     cout << "|_____________________________________________________|" << endl;
 
 
@@ -146,7 +152,7 @@ void Title() {
 
 //메뉴제어
 int Menu() {
-    int x = 24;
+    int x = 22;
     int y = 15;
     gotoxy(x - 1, y);
     cout << "> 게 임 시 작" << endl;
@@ -207,6 +213,8 @@ void StartGame() {
     Record();
     //목숨
     gotoxy(4, 2);   cout << "게임을 시작하려면 스페이스를 눌러주세요!" << endl;
+
+
     textcolor(LIGHTRED, BLACK);
     gotoxy(4, 3);   cout << "♥ ♥ ♥" << endl;
 
@@ -216,11 +224,8 @@ void StartGame() {
     int c = keyControl(); //입력값
    
     //시작지점
-    gotoxy(x - 1, y - 1);
-    cout << "Start" << endl;
-
-    gotoxy(4, 2);   cout << "                                                 " << endl; //시작문구 삭제
     Stage1(40);
+    Stage2(40);
       
        system("pause>null");
     }
@@ -233,8 +238,10 @@ void Check(int max) {
     x = 5; y = 5; //초기좌표 다시 설정
     int h = 4; //하트 좌표 값 설정
 
-
     while (a < max) {
+
+        if (hcnt == 3) { GameOver(); break; }
+
         gotoxy(40, 9);
         cout << score << "점" << endl;
         int n = keyControl();
@@ -276,7 +283,9 @@ void Check(int max) {
 
 
 void Stage1(int max) {
-
+    gotoxy(x - 1, y - 1);
+    cout << "Start" << endl;
+    gotoxy(4, 2);   cout << "STAGE 1                                        " << endl; //시작문구 삭제
     for (int j = 0; j < max; j++) {  //문제 실행
 
         rn = (rand() % 5); //문제 랜덤
@@ -301,7 +310,48 @@ void Stage1(int max) {
     system("cls");
 }
 
+void Stage2(int max) {
 
+    x = 5; y = 5; //초기좌표 다시 설정
+    int h = 4; //하트 좌표 값 설정
+    gotoxy(x - 1, y - 1);
+    cout << "Start" << endl;
+    gotoxy(4, 2);   cout << "STAGE 2                                        " << endl; //시작문구 삭제
+    for (int j = 0; j < max; j++) {  //문제 실행
+
+        rn = (rand() % 5); //문제 랜덤
+        answer[j] = rn; //문제 저장
+
+        if (j < 20) {
+            gotoxy(x++, y);  cout << str[rn] << endl;
+        }
+
+        else if (j < 32) {
+            gotoxy(x--, y++);  cout << str[rn] << endl;
+        }
+
+        else if (j >= 32) {
+            gotoxy(x++, y); cout << str[rn] << endl;
+        }
+
+        //골 지점
+        if (j == 39) { gotoxy(x, y);  cout << "GOAL" << endl; }
+    }
+    Check(40);
+    system("cls");
+}
+
+void GameOver() {
+    x = 5; y = 5; //초기좌표 다시 설정
+    int h = 4; //하트 좌표 값 설정
+
+    score = 0;
+    hcnt = 0;
+    system("cls");
+    cout << "게임 오버~~~";
+    system("pause>null");
+    main();
+}
 
 //게임설명
 void Info() {
@@ -329,9 +379,10 @@ void Info() {
     system("pause>null");
 }
 
+
 //메인함수
 int main(void) {
-    // system("mode con: cols=80 lines=20"); //가로 세로 콘솔크기 추가
+    system("mode con: cols=100 lines=22"); //가로 세로 콘솔크기 추가
     while (true) {
         Title();
         switch (Menu()) {
