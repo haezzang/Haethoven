@@ -14,11 +14,12 @@ extern string name;
  int rn; //문제 랜덤
  int hcnt = 0; //실수 횟수
  int clr[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
+ int clrRn;//컬러 랜덤 인덱스
  int h; //하트 좌표 값 
  string heart = "♥ ♥ ♥";
 
 
- void DeleteHeart() {
+ void DeleteHeart() { //하트제거
      if (hcnt == 0) { heart = "♥ ♥ ♥";  h = 6; }
      else if (hcnt == 1) {heart = "♥ ♥"; h = 5; }
      else if (hcnt == 2) {heart = " ♥"; h = 4;}
@@ -27,7 +28,7 @@ extern string name;
  
  }
 
- int DeleteHeartX() {
+ int DeleteHeartX() { //하트제거 X좌표
      if (hcnt == 0) {h = 6; }
      else if(hcnt == 1) { h = 5; }
      else if (hcnt == 2){  h = 4; }
@@ -57,33 +58,25 @@ void Record() {
 //게임실행화면
 void StartGame() {
     system("cls");
-    srand((int)time(0));     //문제 중복방지
-
-
- 
+    srand((int)time(0));     
 
     Record(); //점수 기록판
-    //목숨
+
     gotoxy(4, 2);   cout << "게임을 시작하려면 스페이스를 눌러주세요!" << endl;
-
-
-
-
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    //문제설정
 
     int c = keyControl(); //입력값
 
-    //시작지점
+    //단계
     Stage1(40);
     Stage2(40);
 
     system("pause>null");
 }
 
-clock_t old_time, cur_time;
 
 
+clock_t old_time, cur_time; //시간체크
 
 //정답 판단
 void Check(int max) {
@@ -99,16 +92,17 @@ void Check(int max) {
 
         cur_time = clock();  //현재  시간
         if (((double)(cur_time - old_time) / CLOCKS_PER_SEC) > 25) {
-            GameOver();  break;
-        }
+            GameOver();  break;   } //시간초과되면 게임오버
 
-        if (hcnt == 3) { GameOver(); break; }
+        if (hcnt == 3) { GameOver(); break; } //실수가 3번이면 게임오버
         
-        gotoxy(40, 9);
-        cout << score << "점" << endl;
-        int n = keyControl();
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+        gotoxy(40, 9); cout << score << "점" << endl;
+
+        int n = keyControl(); //입력값
 
 
+        //방향키 제거
         if (max == 40) {
             if (i < 20) {
                 gotoxy(x++, y);  cout << "  "; //누르면 사라짐
@@ -122,6 +116,8 @@ void Check(int max) {
                 gotoxy(x++, y);  cout << "  "; //누르면 사라짐
             }
         }
+
+        //답 판단
         switch (n) {
         case LEFT:
             if (answer[i] == 0) score += 10;
@@ -145,12 +141,14 @@ void Check(int max) {
 
 }
 
+
+//게임오버
 void GameOver() {
     x = 5; y = 5; //초기좌표 다시 설정
-    int h = 4; //하트 좌표 값 설정
-
     score = 0;
-    hcnt = 0;
+    hcnt = 0;  //점수, 실수 초기화
+    int h = DeleteHeartX(); //하트 좌표 값 설정
+
     system("cls");
     cout << "게임 오버~~~";
     system("pause>null");
@@ -159,12 +157,13 @@ void GameOver() {
 
 
 void Stage1(int max) {
-    DeleteHeart();
+    DeleteHeart(); //하트수 판단
 
-    int clrRn;
-    gotoxy(x - 1, y - 1);
-    cout << "Start" << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    gotoxy(x - 1, y - 1);  cout << "Start" << endl;
     gotoxy(4, 2);   cout << "STAGE 1                                        " << endl; //시작문구 삭제
+
+
     for (int j = 0; j < max; j++) {  //문제 실행
         clrRn = rand() % 6;
          SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
@@ -184,7 +183,10 @@ void Stage1(int max) {
         }
 
         //골 지점
-        if (j == 39) { gotoxy(x, y);  cout << "GOAL" << endl; }
+       
+        if (j == 39) { 
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+            gotoxy(x, y);  cout << "GOAL" << endl; }
     }
     Check(40);
     system("cls");
@@ -192,17 +194,18 @@ void Stage1(int max) {
 
 void Stage2(int max) {
     DeleteHeart();
-    x = 5;
-    y = 5; //초기 위치
+    x = 5;  y = 5; //초기 위치
   
-
     gotoxy(x - 1, y - 1);
-    cout << "Start" << endl;
+    cout << "Start" << endl; //시작위치
+
     gotoxy(4, 2);   cout << "STAGE 1                                        " << endl; //시작문구 삭제
     for (int j = 0; j < max; j++) {  //문제 실행
 
+        clrRn = rand() % 6;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
         rn = (rand() % 5); //문제 랜덤
-        answer[j] = rn; //문제 저장
+        answer[j] = rn; //문제 답 저장
 
         if (j < 20) {
             gotoxy(x++, y);  cout << str[rn];
