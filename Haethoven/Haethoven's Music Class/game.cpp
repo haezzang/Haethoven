@@ -13,7 +13,12 @@ extern string name;
  int y = 5; //초기 위치
  int rn; //문제 랜덤
  int hcnt = 0; //실수 횟수
+ int clr[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
 
+
+ //시간
+ time_t startTime = 0, endTime = 0; // 게임 시간 제한
+ double user_time; // 게임 시간
 
 //점수판과 제한시간
 void Record() {
@@ -44,10 +49,10 @@ void StartGame() {
     gotoxy(4, 2);   cout << "게임을 시작하려면 스페이스를 눌러주세요!" << endl;
 
 
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
     gotoxy(4, 3);   cout << "♥ ♥ ♥" << endl;
 
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     //문제설정
 
     int c = keyControl(); //입력값
@@ -59,9 +64,12 @@ void StartGame() {
     system("pause>null");
 }
 
+clock_t old_time, cur_time;
 
 //정답 판단
 void Check(int max) {
+
+    old_time = clock();    //시작 시간
 
     int i = 0;
     x = 5; y = 5; //초기좌표 다시 설정
@@ -69,40 +77,48 @@ void Check(int max) {
 
     while (i < max) {
 
-        if (hcnt == 3) { GameOver(); break; }
 
+        cur_time = clock();  //현재  시간
+        if (((double)(cur_time - old_time) / CLOCKS_PER_SEC) > 25) {
+            GameOver();  break;
+        }
+
+        if (hcnt == 3) { GameOver(); break; }
+        
         gotoxy(40, 9);
         cout << score << "점" << endl;
         int n = keyControl();
+
+
         if (max == 40) {
             if (i < 20) {
-                gotoxy(x++, y);  cout << " "; //누르면 사라짐
+                gotoxy(x++, y);  cout << "  "; //누르면 사라짐
             }
 
             else if (i < 32) {
-                gotoxy(x--, y++);  cout << " "; //누르면 사라짐
+                gotoxy(x--, y++);  cout << "  "; //누르면 사라짐
             }
 
             else if (i >= 32) {
-                gotoxy(x++, y);  cout << " "; //누르면 사라짐
+                gotoxy(x++, y);  cout << "  "; //누르면 사라짐
             }
         }
         switch (n) {
         case LEFT:
             if (answer[i] == 0) score += 10;
-            else { hcnt++;  gotoxy(h++, 3); cout << " "; } break;
+            else { hcnt++;  gotoxy(h++, 3);  cout << " "; } break;
         case RIGHT:
             if (answer[i] == 1) score += 10;
-            else { hcnt++;  gotoxy(h++, 3); cout << " "; } break;
+            else { hcnt++;  gotoxy(h++, 3);  cout << " "; } break;
         case UP:
             if (answer[i] == 2) score += 10;
-            else { hcnt++;  gotoxy(h++, 3); cout << " "; } break;
+            else { hcnt++;  gotoxy(h++, 3);  cout << " "; } break;
         case DOWN:
             if (answer[i] == 3) score += 10;
-            else { hcnt++;  gotoxy(h++, 3); cout << " "; } break;
+            else { hcnt++;  gotoxy(h++, 3);  cout << " "; } break;
         case SPACE:
             if (answer[i] == 4) score += 10;
-            else { hcnt++;  gotoxy(h++, 3); cout << " "; } break;
+            else { hcnt++;  gotoxy(h++, 3);  cout << " "; } break;
 
         }
         i++;
@@ -125,25 +141,26 @@ void GameOver() {
 
 void Stage1(int max) {
 
-
+    int clrRn;
     gotoxy(x - 1, y - 1);
     cout << "Start" << endl;
     gotoxy(4, 2);   cout << "STAGE 1                                        " << endl; //시작문구 삭제
     for (int j = 0; j < max; j++) {  //문제 실행
-
+        clrRn = rand() % 6;
+         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
         rn = (rand() % 5); //문제 랜덤
         answer[j] = rn; //문제 저장
 
         if (j < 20) {
-            gotoxy(x++, y);  cout << str[rn] << endl;
+            gotoxy(x++, y);  cout << str[rn];
         }
 
         else if (j < 32) {
-            gotoxy(x--, y++);  cout << str[rn] << endl;
+            gotoxy(x--, y++);  cout << str[rn];
         }
 
         else if (j >= 32) {
-            gotoxy(x++, y); cout << str[rn] << endl;
+            gotoxy(x++, y); cout << str[rn];
         }
 
         //골 지점
@@ -154,6 +171,7 @@ void Stage1(int max) {
 }
 
 void Stage2(int max) {
+  
     x = 5;
     y = 5; //초기 위치
     int h = 4; //하트 좌표 값 
@@ -167,19 +185,19 @@ void Stage2(int max) {
         answer[j] = rn; //문제 저장
 
         if (j < 20) {
-            gotoxy(x++, y);  cout << str[rn] << endl;
+            gotoxy(x++, y);  cout << str[rn];
         }
 
         else if (j < 32) {
-            gotoxy(x--, y++);  cout << str[rn] << endl;
+            gotoxy(x--, y++);  cout << str[rn];
         }
 
         else if (j >= 32) {
-            gotoxy(x++, y); cout << str[rn] << endl;
-        }
+            gotoxy(x++, y); cout << str[rn];
 
-        //골 지점
-        if (j == 39) { gotoxy(x, y);  cout << "GOAL" << endl; }
+            //골 지점
+            if (j == 39) { gotoxy(x, y);  cout << "GOAL" << endl; }
+        }
     }
     Check(40);
     system("cls");

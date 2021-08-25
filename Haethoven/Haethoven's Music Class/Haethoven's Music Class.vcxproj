@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ranking.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="haethoven.h" />

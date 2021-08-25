@@ -14,7 +14,7 @@ string name;
 void gotoxy(int x, int y)
 {
     COORD Pos;
-    Pos.X = 2 * x;
+    Pos.X = 2*x;
     Pos.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
@@ -51,7 +51,7 @@ int keyControl() {
 //타이틀
 void Title() {
     //아스키아트
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
     gotoxy(11, 4);
     cout << " _   _   ___   _____  _____  _____  _   _  _____  _   _ " << endl;
     gotoxy(11, 5);
@@ -65,27 +65,27 @@ void Title() {
     gotoxy(11, 9);
     cout << "\\_| |_/\\_| |_/\\____/   \\_/   \\___/  \\___/ \\____/ \\_| \\_/" << endl;
     
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     gotoxy(31, 10);
     cout << "해토벤의 음악교실" << endl;
     gotoxy(11, 13);
-    cout << " _____________________________________________________" << endl;
+    cout << "┌─────────────────────────────────────────────────────┐" << endl; 
     gotoxy(11, 14);
-    cout << "|                                                     |" << endl;
+    cout << "│                                                     │"<< endl;
     gotoxy(11, 15);
-    cout << "|                                                     |" << endl;
+    cout << "│                                                     │" << endl;
     gotoxy(11, 16);
-    cout << "|                                                     |" << endl;
+    cout << "│                                                     │" << endl;
     gotoxy(11, 17);
-    cout << "|                                                     |" << endl;
+    cout << "│                                                     │" << endl;
     gotoxy(11, 18);
-    cout << "|                                                     |" << endl;
+    cout << "│                                                     │" << endl;
     gotoxy(11, 19);
-    cout << "|                                                     |" << endl;
+    cout << "│                                                     │" << endl;
     gotoxy(11, 20);
-    cout << "|                                                     |" << endl;
+    cout << "│                                                     │" << endl;
     gotoxy(11, 21);
-    cout << "|_____________________________________________________|" << endl;
+    cout << "└─────────────────────────────────────────────────────┘" << endl;
 
 
     // system("pause>null");
@@ -94,7 +94,7 @@ void Title() {
 //메뉴제어
 int Menu() {
     int x = 22;
-    int y = 15;
+    int y = 14;
     gotoxy(x - 1, y);
     cout << "> 게 임 시 작" << endl;
     gotoxy(x, y + 2);
@@ -105,21 +105,21 @@ int Menu() {
         int n = keyControl();
         switch (n) {
         case UP: {
-            if (y > 15) {
+            if (y > 14) {
                 gotoxy(x - 1, y); printf("  ");
                 gotoxy(x - 1, y -= 2); printf(">");
             }
             break;
         }
         case DOWN: {
-            if (y < 19) {
+            if (y < 18) {
                 gotoxy(x - 1, y); printf("  ");
                 gotoxy(x - 1, y += 2); printf(">");
             }
             break;
         }
         case SPACE: {
-            return y - 15;
+            return y - 14;
         }
         }
     }
@@ -153,7 +153,8 @@ void Info() {
     system("pause>null");
 }
 
-
+//랭킹
+extern void Rank();
 //메인함수
 int main(void) {
     system("mode con: cols=100 lines=22"); //가로 세로 콘솔크기 추가
@@ -161,7 +162,7 @@ int main(void) {
         Title();
         switch (Menu()) {
         case 0: Info(); break; //게임시작
-        case 2: Info(); break; //랭킹보기
+        case 2: Rank(); break; //랭킹보기
         case 4: return 0; //게임종료
         }
         system("cls");
