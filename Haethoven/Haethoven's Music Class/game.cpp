@@ -14,11 +14,26 @@ extern string name;
  int rn; //문제 랜덤
  int hcnt = 0; //실수 횟수
  int clr[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
+ int h; //하트 좌표 값 
+ string heart = "♥ ♥ ♥";
 
 
- //시간
- time_t startTime = 0, endTime = 0; // 게임 시간 제한
- double user_time; // 게임 시간
+ void DeleteHeart() {
+     if (hcnt == 0) { heart = "♥ ♥ ♥";  h = 6; }
+     else if (hcnt == 1) {heart = "♥ ♥"; h = 5; }
+     else if (hcnt == 2) {heart = " ♥"; h = 4;}
+     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+     gotoxy(4, 3);   cout << heart << endl;
+ 
+ }
+
+ int DeleteHeartX() {
+     if (hcnt == 0) {h = 6; }
+     else if(hcnt == 1) { h = 5; }
+     else if (hcnt == 2){  h = 4; }
+     return h;
+
+ }
 
 //점수판과 제한시간
 void Record() {
@@ -44,13 +59,15 @@ void StartGame() {
     system("cls");
     srand((int)time(0));     //문제 중복방지
 
-    Record();
+
+ 
+
+    Record(); //점수 기록판
     //목숨
     gotoxy(4, 2);   cout << "게임을 시작하려면 스페이스를 눌러주세요!" << endl;
 
 
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
-    gotoxy(4, 3);   cout << "♥ ♥ ♥" << endl;
+
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     //문제설정
@@ -66,6 +83,8 @@ void StartGame() {
 
 clock_t old_time, cur_time;
 
+
+
 //정답 판단
 void Check(int max) {
 
@@ -73,7 +92,7 @@ void Check(int max) {
 
     int i = 0;
     x = 5; y = 5; //초기좌표 다시 설정
-    int h = 4; //하트 좌표 값 설정
+    int h = DeleteHeartX(); //하트 좌표 값 설정
 
     while (i < max) {
 
@@ -106,19 +125,19 @@ void Check(int max) {
         switch (n) {
         case LEFT:
             if (answer[i] == 0) score += 10;
-            else { hcnt++;  gotoxy(h++, 3);  cout << " "; } break;
+            else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;
         case RIGHT:
             if (answer[i] == 1) score += 10;
-            else { hcnt++;  gotoxy(h++, 3);  cout << " "; } break;
+            else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;
         case UP:
             if (answer[i] == 2) score += 10;
-            else { hcnt++;  gotoxy(h++, 3);  cout << " "; } break;
+            else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;
         case DOWN:
             if (answer[i] == 3) score += 10;
-            else { hcnt++;  gotoxy(h++, 3);  cout << " "; } break;
+            else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;
         case SPACE:
             if (answer[i] == 4) score += 10;
-            else { hcnt++;  gotoxy(h++, 3);  cout << " "; } break;
+            else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;
 
         }
         i++;
@@ -140,6 +159,7 @@ void GameOver() {
 
 
 void Stage1(int max) {
+    DeleteHeart();
 
     int clrRn;
     gotoxy(x - 1, y - 1);
@@ -171,10 +191,10 @@ void Stage1(int max) {
 }
 
 void Stage2(int max) {
-  
+    DeleteHeart();
     x = 5;
     y = 5; //초기 위치
-    int h = 4; //하트 좌표 값 
+  
 
     gotoxy(x - 1, y - 1);
     cout << "Start" << endl;
