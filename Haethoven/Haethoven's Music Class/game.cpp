@@ -68,8 +68,8 @@ void StartGame() {
     int c = keyControl(); //입력값
 
     //단계
-    Stage1(40);
-    Stage2(40);
+   Stage1(40);
+    Stage2(50);
 
     system("pause>null");
 }
@@ -103,22 +103,23 @@ void Check(int max) {
 
 
         //방향키 제거
-        if (max == 40) {
-            if (i < 20) {
-                gotoxy(x++, y);  cout << "  "; //누르면 사라짐
-            }
-
-            else if (i < 32) {
-                gotoxy(x--, y++);  cout << "  "; //누르면 사라짐
-            }
-
-            else if (i >= 32) {
-                gotoxy(x++, y);  cout << "  "; //누르면 사라짐
+        if (max == 40) { //1단계
+            switch (i / 5)
+            {
+            case 0: gotoxy(x, y++);  cout <<" "; break;
+            case 1:  gotoxy(x++, y);  cout << " "; break;
+            case 2:  gotoxy(x, y++);  cout << " "; break;
+            case 3: gotoxy(x++, y);  cout << " "; break;
+            case 4: gotoxy(x, y--);  cout << " "; break;
+            case 5: gotoxy(x++, y);  cout << " "; break;
+            case 6:  gotoxy(x, y++);  cout << " "; break;
+            case 7:  gotoxy(x++, y);  cout << " "; break;
             }
         }
 
         //답 판단
         switch (n) {
+        case 27: main(); break;
         case LEFT:
             if (answer[i] == 0) score += 10;
             else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;
@@ -170,20 +171,18 @@ void Stage1(int max) {
         rn = (rand() % 5); //문제 랜덤
         answer[j] = rn; //문제 저장
 
-        if (j < 20) {
-            gotoxy(x++, y);  cout << str[rn];
-        }
-
-        else if (j < 32) {
-            gotoxy(x--, y++);  cout << str[rn];
-        }
-
-        else if (j >= 32) {
-            gotoxy(x++, y); cout << str[rn];
-        }
-
+        switch (j/5)
+        {
+        case 0: gotoxy(x, y++);  cout << str[rn]; break;
+        case 1:  gotoxy(x++, y);  cout << str[rn];  break;
+        case 2:  gotoxy(x, y++);  cout << str[rn];  break;
+        case 3: gotoxy(x++, y);  cout << str[rn]; break;
+        case 4: gotoxy(x, y--);  cout << str[rn];  break;
+        case 5: gotoxy(x++, y);  cout << str[rn]; break;
+        case 6:  gotoxy(x, y++);  cout << str[rn]; break;
+        case 7:  gotoxy(x++, y);  cout << str[rn]; break;
+        } 
         //골 지점
-       
         if (j == 39) { 
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
             gotoxy(x, y);  cout << "GOAL" << endl; }
@@ -199,7 +198,7 @@ void Stage2(int max) {
     gotoxy(x - 1, y - 1);
     cout << "Start" << endl; //시작위치
 
-    gotoxy(4, 2);   cout << "STAGE 1                                        " << endl; //시작문구 삭제
+    gotoxy(4, 2);   cout << "STAGE 2" << endl; 
     for (int j = 0; j < max; j++) {  //문제 실행
 
         clrRn = rand() % 6;
@@ -222,6 +221,6 @@ void Stage2(int max) {
             if (j == 39) { gotoxy(x, y);  cout << "GOAL" << endl; }
         }
     }
-    Check(40);
+    Check(50);
     system("cls");
 }
