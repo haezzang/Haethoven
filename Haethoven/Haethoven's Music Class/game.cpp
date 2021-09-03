@@ -23,6 +23,7 @@ void Stage1(int);
 void Stage2(int);
 void Stage3(int);
 void Stage4(int);
+void Stage5(int);
 
 void DeleteHeart() { //하트제거
     if (hcnt == 0) { heart = "♥ ♥ ♥";  h = 6; }
@@ -73,10 +74,12 @@ void StartGame() {
     int c = keyControl(); //입력값
 
     //단계
-  // Stage1(40);
-   //Stage2(40);
-   //Stage3(50);
+    Stage1(40);
+    Stage2(40);
+    Stage3(50);
     Stage4(55);
+    Stage5(60);
+
 
     system("pause>null");
 }
@@ -130,7 +133,6 @@ void Check(int step,int answer[], int max, int x, int y) {
             case 7:  gotoxy(x++, y);  cout << " "; break;
             }
         }
-
         else  if (step == 3) {
             if (i < 2) { gotoxy(x, y++);   cout << " "; }
             else if (i < 8) { gotoxy(x--, y);   cout << " ";; }
@@ -139,8 +141,7 @@ void Check(int step,int answer[], int max, int x, int y) {
             else if (i < 29) { gotoxy(x, y++);   cout << " "; }
             else if (i < 40) { gotoxy(x--, y);   cout << " "; }
             else if (i < 50) { gotoxy(x, y--);   cout << " "; }
-        }
-        
+        }      
         else if (step == 4) {
             if (i < 10) { gotoxy(x--, y++);  cout << " "; }
             else if (i < 12) { gotoxy(x++, y);  cout << " "; }
@@ -151,6 +152,14 @@ void Check(int step,int answer[], int max, int x, int y) {
             else if (i < 46) { gotoxy(x++, y--); cout << " "; }
             else if (i < 48) { gotoxy(x++, y);  cout << " "; }
             else if (i < 55) { gotoxy(x++, y++);  cout << " "; }
+        }
+        else if (step == 5) {
+            if (i < 8) { gotoxy(x++, y--);  cout << " ";  }
+            else if (i < 25) { gotoxy(x++, y);   cout << " ";  }
+            else if (i < 37) { gotoxy(x--, y++);  cout << " ";  }
+            else if (i < 52) { gotoxy(x--, y);   cout << " ";  }
+            else if (i < 54) { gotoxy(x, y--);   cout << " ";  }
+            else if (i < 60) { gotoxy(x++, y);   cout << " ";  }
         }
 
         //답 판단
@@ -193,8 +202,6 @@ void GameOver() {
 }
 
 
-
-
 void Stage1(int max) {
     DeleteHeart(); //하트수 판단
     int answer[40] = { 0, }; //답체크
@@ -224,7 +231,6 @@ void Stage1(int max) {
     Check(1,answer, 40, 25, 10);
     system("cls");
 }
-
 void Stage2(int max) {
     DeleteHeart(); //하트수 판단
     int answer[40] = { 0, }; //답체크
@@ -326,5 +332,39 @@ void Stage4(int max) {
     gotoxy(x--, y--);  cout << "GOAL" << endl;
     // 단계/문제판단저장/문제수/시작할좌표
     Check(4, answer, 55, 15, 5);
+    system("cls");
+}
+void Stage5(int max) {
+    int answer[60] = { 0, }; //답체크
+
+    DeleteHeart();
+    x = 6;  y = 13; //초기 위치
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    gotoxy(x - 3, y ); cout << "Start" << endl; //시작위치
+
+    gotoxy(4, 2);   cout << "STAGE 5" << endl;
+    for (int j = 0; j < max; j++) {  //문제 실행
+
+        clrRn = rand() % 6;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
+        rn = (rand() % 5); //문제 랜덤
+        answer[j] = rn; //문제 답 저장
+
+        if (j < 8) {gotoxy(x++, y--);  cout << str[rn]; }
+        else if (j < 25) { gotoxy(x++, y);  cout << str[rn]; }
+        else if (j < 37) { gotoxy(x--, y++);  cout << str[rn]; }
+        else if (j < 52) { gotoxy(x--, y);  cout << str[rn]; }
+        else if (j < 54) { gotoxy(x, y--);  cout << str[rn]; }
+        else if (j < 60) { gotoxy(x++, y);  cout << str[rn]; }
+       
+    
+
+    }
+    //골 지점
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    gotoxy(x--, y--);  cout << "GOAL" << endl;
+    // 단계/문제판단저장/문제수/시작할좌표
+    Check(4, answer, 60, 6, 13);
     system("cls");
 }
