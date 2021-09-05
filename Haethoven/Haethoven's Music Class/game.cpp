@@ -16,7 +16,7 @@ int hcnt = 0; //실수 횟수
 int clr[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
 int clrRn;//컬러 랜덤 인덱스
 int h; //하트 좌표 값 
-int tt = 0;
+int tt = 0; //누적 초
 string heart = "♥ ♥ ♥";
 
 
@@ -79,9 +79,9 @@ void StartGame() {
     //단계
     Stage1(40);
     Stage2(40);
-   Stage3(50);
+    Stage3(50);
     Stage4(55);
-   Stage5(60);
+    Stage5(60);
 
 
     system("pause>null");
@@ -105,10 +105,10 @@ void Check(int step,int answer[], int max, int x, int y) {
 
         cur_time = clock();  //현재  시간
         if (((double)(cur_time - old_time) / CLOCKS_PER_SEC) > 25) {
-         GameOver();  break;
+            GameOver();  break;
         } //시간초과되면 게임오버
 
-        if (hcnt == 3) { GameOver(); break; } //실수가 3번이면 게임오버
+        if (hcnt == 3) {   GameOver(); break; } //실수가 3번이면 게임오버
 
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
         gotoxy(37, 10);
@@ -215,8 +215,8 @@ void Stage1(int max) {
 
     x = 25;  y = 10; //초기 위치
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x - 1, y - 1);  cout << "Start" << endl;
-    gotoxy(4, 2);   cout << "STAGE 2" << endl;
+    gotoxy(x - 1, y - 1);  cout << "START" << endl;
+    gotoxy(4, 2);   cout << "STAGE 1" << endl;
 
 
     for (int j = 0; j < max; j++) {  //문제 실행
@@ -245,7 +245,7 @@ void Stage2(int max) {
     x = 5;  y = 5; //초기 위치
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x - 1, y - 1);  cout << "Start" << endl;
+    gotoxy(x - 1, y - 1);  cout << "START" << endl;
     gotoxy(4, 2);   cout << "STAGE 2                                        " << endl; //시작문구 삭제
 
 
@@ -283,7 +283,7 @@ void Stage3(int max) {
     x = 20;  y = 10; //초기 위치
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x - 1, y - 1); cout << "Start" << endl; //시작위치
+    gotoxy(x - 1, y - 1); cout << "START" << endl; //시작위치
 
     gotoxy(4, 2);   cout << "STAGE 3" << endl;
     for (int j = 0; j < max; j++) {  //문제 실행
@@ -313,10 +313,10 @@ void Stage4(int max) {
     int answer[55] = { 0, }; //답체크
 
     DeleteHeart();
-    x = 15;  y = 5; //초기 위치
+    x = 12;  y = 5; //초기 위치
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x - 1, y - 1); cout << "Start" << endl; //시작위치
+    gotoxy(x - 1, y - 1); cout << "START" << endl; //시작위치
 
     gotoxy(4, 2);   cout << "STAGE 4" << endl;
     for (int j = 0; j < max; j++) {  //문제 실행
@@ -341,7 +341,7 @@ void Stage4(int max) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     gotoxy(x--, y--);  cout << "GOAL" << endl;
     // 단계/문제판단저장/문제수/시작할좌표
-    Check(4, answer, 55, 15, 5);
+    Check(4, answer, 55, 12, 5);
     system("cls");
 }
 void Stage5(int max) {
@@ -349,10 +349,10 @@ void Stage5(int max) {
     int answer[60] = { 0, }; //답체크
 
     DeleteHeart();
-    x = 6;  y = 13; //초기 위치
+    x = 4;  y = 13; //초기 위치
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x - 3, y ); cout << "Start" << endl; //시작위치
+    gotoxy(x - 3, y ); cout << "START" << endl; //시작위치
 
     gotoxy(4, 2);   cout << "STAGE 5" << endl;
     for (int j = 0; j < max; j++) {  //문제 실행
@@ -376,6 +376,6 @@ void Stage5(int max) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     gotoxy(x--, y--);  cout << "GOAL" << endl;
     // 단계/문제판단저장/문제수/시작할좌표
-    Check(5, answer, 60, 6, 13);
+    Check(5, answer, 60, 4, 13);
     system("cls");
 }

@@ -170,9 +170,8 @@ int main(void) {
         switch (Menu()) {
         case 0: Info(); break; //게임시작
         case 2: Rank(); break; //랭킹보기
-        case 4: return 0; //게임종료
+        case 4:  return 0;//게임종료
         }
         system("cls");
     }
-
 }
