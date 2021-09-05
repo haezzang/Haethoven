@@ -17,6 +17,7 @@ int clr[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
 int clrRn;//컬러 랜덤 인덱스
 int h; //하트 좌표 값 
 int tt = 0; //누적 초
+int over = 0; //게임오버 이유
 string heart = "♥ ♥ ♥";
 
 
@@ -25,6 +26,7 @@ void Stage2(int);
 void Stage3(int);
 void Stage4(int);
 void Stage5(int);
+void GameClear();
 
 void DeleteHeart() { //하트제거
     if (hcnt == 0) { heart = "♥ ♥ ♥";  h = 6; }
@@ -42,6 +44,8 @@ int DeleteHeartX() { //하트제거 X좌표
     return h;
 
 }
+
+
 
 //점수판과 제한시간
 void Record() {
@@ -82,11 +86,60 @@ void StartGame() {
     Stage3(50);
     Stage4(55);
     Stage5(60);
-
+    GameClear();
 
     system("pause>null");
 }
 
+void GameClear() {
+    x = 5; y = 5; //초기좌표 다시 설정
+    score = 0;
+    hcnt = 0;  //점수, 실수 초기화
+    int h = DeleteHeartX(); //하트 좌표 값 설정
+
+    system("cls");
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+    gotoxy(11, 7); cout << " _____   ___  ___  ___ _____   _____  _      _____   ___  ______ " << endl;
+    gotoxy(11, 8);  cout << "|  __ \\ / _ \\ |  \\/  ||  ___| /  __ \\| |    |  ___| / _ \\ | ___ \\" << endl;
+    gotoxy(11, 9); cout << "| |  \\// /_\\ \\| .  . || |__   | /  \\/| |    | |__  / /_\\ \\| |_/ /" << endl;
+    gotoxy(11, 10); cout << "| | __ |  _  || |\\/| ||  __|  | |    | |    |  __| |  _  ||    /  " << endl;
+    gotoxy(11, 11); cout << "| |_\\ \\| | | || |  | || |___  | \\__/\\| |____| |___ | | | || |\\ \\   " << endl;
+    gotoxy(11, 12); cout << "\\____/\\_| |_/\\_|  |_/\\____/   \\____/\\_____/\\____/ \\_| |_/\\_| \\_| " << endl;
+    gotoxy(20, 14);  cout << "모든 스테이지를 성공하셨습니다!" << endl; 
+    gotoxy(22, 16);  cout << "최종 점수 : " << score << endl;
+    gotoxy(15, 18);  cout << "메인화면으로 돌아가려면 SPACE키를 눌러주세요" << endl;
+    system("pause>null");
+
+    main();
+}
+//게임오버
+void GameOver() {
+   system("cls");
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+    gotoxy(11, 7); cout << " _____   ___  ___  ___ _____   _____  _   _  _____ ______ " << endl;
+    gotoxy(11, 8);  cout << "|  __ \\ / _ \\ |  \\/  ||  ___| |  _  || | | ||  ___|| ___ \\" << endl;
+    gotoxy(11, 9); cout << "| |  \\// /_\\ \\| .  . || |__   | | | || | | || |__  | |_/ /" << endl;
+    gotoxy(11, 10); cout << "| | __ |  _  || |\\/| ||  __|  | | | || | | ||  __| |    / " << endl;
+    gotoxy(11, 11); cout << "| |_\\ \\| | | || |  | || |___  \\ \\_/ /\\ \\_/ /| |___ | |\\ \\  " << endl;
+    gotoxy(11, 12); cout << " \\____/\\_| |_/\\_|  |_/\\____/   \\___/  \\___/ \\____/ \\_| \\_| " << endl;
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    if (over == 1) { gotoxy(20, 14);  cout << "시간이 초과 되었습니다" << endl; }
+    else if (over == 0) { gotoxy(20, 14);  cout << "3번 이상 실수 하셨습니다" << endl; }
+    gotoxy(22, 16);  cout <<"최종 점수 : " << score << endl;
+    gotoxy(15, 18);  cout << "메인화면으로 돌아가려면 SPACE키를 눌러주세요" << endl;
+
+    system("pause>null");
+
+    x = 5; y = 5; //초기좌표 다시 설정
+    score = 0;
+    hcnt = 0;  //점수, 실수 초기화
+    int h = DeleteHeartX(); //하트 좌표 값 설정
+
+    main();
+}
 
 
 clock_t old_time, cur_time; //시간체크
@@ -102,13 +155,16 @@ void Check(int step,int answer[], int max, int x, int y) {
 
     while (i < max) {
 
-
         cur_time = clock();  //현재  시간
-        if (((double)(cur_time - old_time) / CLOCKS_PER_SEC) > 25) {
-            GameOver();  break;
-        } //시간초과되면 게임오버
 
-        if (hcnt == 3) {   GameOver(); break; } //실수가 3번이면 게임오버
+        //시간초과 게임오버
+        if (((double)(cur_time - old_time) / CLOCKS_PER_SEC) > 25) {
+            over = 1;  GameOver();  break;
+        } 
+        //실수3번 게임오버
+        else if (hcnt == 3) {  
+            over = 0;   GameOver(); break;
+        } 
 
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
         gotoxy(37, 10);
@@ -194,18 +250,7 @@ void Check(int step,int answer[], int max, int x, int y) {
 }
 
 
-//게임오버
-void GameOver() {
-    x = 5; y = 5; //초기좌표 다시 설정
-    score = 0;
-    hcnt = 0;  //점수, 실수 초기화
-    int h = DeleteHeartX(); //하트 좌표 값 설정
 
-    system("cls");
-    cout << "게임 오버~~~";
-    system("pause>null");
-    main();
-}
 
 
 void Stage1(int max) {
