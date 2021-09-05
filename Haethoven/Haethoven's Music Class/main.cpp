@@ -1,4 +1,7 @@
 ﻿#include "haethoven.h"
+#include <mmsystem.h>
+#pragma comment(lib,"winmm.lib")
+#define PlaySound PlaySoundW
 using namespace std;
 //디코딩 폰트 32
 
@@ -50,6 +53,7 @@ int keyControl() {
 
 //타이틀
 void Title() {
+    PlaySound(TEXT("music.wav"), NULL, SND_FILENAME | SND_ASYNC);
     //아스키아트
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
     gotoxy(11, 4);
@@ -93,6 +97,7 @@ void Title() {
 
 //메뉴제어
 int Menu() {
+
     int x = 22;
     int y = 14;
     gotoxy(x - 1, y);
@@ -157,6 +162,8 @@ void Info() {
 extern void Rank();
 //메인함수
 int main(void) {
+
+
     system("mode con: cols=100 lines=22"); //가로 세로 콘솔크기 추가
     while (true) {
         Title();

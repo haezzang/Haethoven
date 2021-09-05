@@ -16,6 +16,7 @@ int hcnt = 0; //실수 횟수
 int clr[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
 int clrRn;//컬러 랜덤 인덱스
 int h; //하트 좌표 값 
+int tt = 0;
 string heart = "♥ ♥ ♥";
 
 
@@ -44,20 +45,22 @@ int DeleteHeartX() { //하트제거 X좌표
 
 //점수판과 제한시간
 void Record() {
-    gotoxy(35, 4);
-    cout << name << "님의 기록판" << endl;
-    gotoxy(35, 5);
-    cout << " ____________________________" << endl;
-    gotoxy(40, 8);
+    gotoxy(31, 6);
+    cout <<"> "<< name << " < 게임중"<< endl;
+    gotoxy(31, 7);
+    cout << "┌────────────────────────────┐" << endl;
+    gotoxy(36, 9);
     cout << "S C O R E" << endl;
-    gotoxy(40, 9);
+    gotoxy(37, 10);
     cout << score << "점" << endl;
-    gotoxy(40, 11);
-    cout << "제한시간" << endl;
+    gotoxy(37, 12);
+    cout << "누적초" << endl;
+    gotoxy(37, 13);
+    cout << tt <<"초"<< endl;
+    gotoxy(31, 15);
+    cout << "└────────────────────────────┘" << endl;
 
 
-    gotoxy(35, 20);
-    cout << " ____________________________" << endl;
 }
 
 
@@ -66,7 +69,7 @@ void StartGame() {
     system("cls");
     srand((int)time(0));
 
-    Record(); //점수 기록판
+
 
     gotoxy(4, 2);   cout << "게임을 시작하려면 스페이스를 눌러주세요!" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
@@ -76,9 +79,9 @@ void StartGame() {
     //단계
     Stage1(40);
     Stage2(40);
-    Stage3(50);
+   Stage3(50);
     Stage4(55);
-    Stage5(60);
+   Stage5(60);
 
 
     system("pause>null");
@@ -93,7 +96,7 @@ clock_t old_time, cur_time; //시간체크
 void Check(int step,int answer[], int max, int x, int y) {
 
     old_time = clock();    //시작 시간
-
+   
     int i = 0;
     int h = DeleteHeartX(); //하트 좌표 값 설정
 
@@ -102,13 +105,14 @@ void Check(int step,int answer[], int max, int x, int y) {
 
         cur_time = clock();  //현재  시간
         if (((double)(cur_time - old_time) / CLOCKS_PER_SEC) > 25) {
-            GameOver();  break;
+         GameOver();  break;
         } //시간초과되면 게임오버
 
         if (hcnt == 3) { GameOver(); break; } //실수가 3번이면 게임오버
 
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-        gotoxy(40, 9); cout << score << "점" << endl;
+        gotoxy(37, 10);
+        cout << score << "점" << endl;
 
         int n = keyControl(); //입력값
 
@@ -154,12 +158,14 @@ void Check(int step,int answer[], int max, int x, int y) {
             else if (i < 55) { gotoxy(x++, y++);  cout << " "; }
         }
         else if (step == 5) {
+
             if (i < 8) { gotoxy(x++, y--);  cout << " ";  }
             else if (i < 25) { gotoxy(x++, y);   cout << " ";  }
             else if (i < 37) { gotoxy(x--, y++);  cout << " ";  }
             else if (i < 52) { gotoxy(x--, y);   cout << " ";  }
             else if (i < 54) { gotoxy(x, y--);   cout << " ";  }
             else if (i < 60) { gotoxy(x++, y);   cout << " ";  }
+
         }
 
         //답 판단
@@ -184,7 +190,7 @@ void Check(int step,int answer[], int max, int x, int y) {
         }
         i++;
     }
-
+    tt+= ((double)(cur_time - old_time) / CLOCKS_PER_SEC); //누적 초 계산
 }
 
 
@@ -203,6 +209,7 @@ void GameOver() {
 
 
 void Stage1(int max) {
+    Record(); //점수 기록판
     DeleteHeart(); //하트수 판단
     int answer[40] = { 0, }; //답체크
 
@@ -232,6 +239,7 @@ void Stage1(int max) {
     system("cls");
 }
 void Stage2(int max) {
+    Record(); //점수 기록판
     DeleteHeart(); //하트수 판단
     int answer[40] = { 0, }; //답체크
     x = 5;  y = 5; //초기 위치
@@ -268,6 +276,7 @@ void Stage2(int max) {
     system("cls");
 }
 void Stage3(int max) {
+    Record(); //점수 기록판
     int answer[50] = { 0, }; //답체크
 
     DeleteHeart();
@@ -300,6 +309,7 @@ void Stage3(int max) {
     system("cls");
 }
 void Stage4(int max) {
+    Record(); //점수 기록판
     int answer[55] = { 0, }; //답체크
 
     DeleteHeart();
@@ -335,6 +345,7 @@ void Stage4(int max) {
     system("cls");
 }
 void Stage5(int max) {
+    Record(); //점수 기록판
     int answer[60] = { 0, }; //답체크
 
     DeleteHeart();
@@ -365,6 +376,6 @@ void Stage5(int max) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     gotoxy(x--, y--);  cout << "GOAL" << endl;
     // 단계/문제판단저장/문제수/시작할좌표
-    Check(4, answer, 60, 6, 13);
+    Check(5, answer, 60, 6, 13);
     system("cls");
 }
