@@ -2,6 +2,8 @@
 #include<Windows.h>
 #include<conio.h>
 #include <time.h>
+#include <mmsystem.h>
+#pragma comment(lib,"winmm.lib")
 
 
 
@@ -48,6 +50,10 @@ void Record(); //게임 점수 기록판
 int keyControl(); //입력값 
 void Stage1(int); //맵1 
 void Stage2(int); //맵2
+void Stage3(int); //맵2
+void Stage4(int); //맵2
+void Stage5(int); //맵2
+void GameClear();
 void GameOver(); //게임오버
 int main(); //메인
 

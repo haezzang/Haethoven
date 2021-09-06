@@ -1,7 +1,4 @@
 ﻿#include "haethoven.h"
-#include <mmsystem.h>
-#pragma comment(lib,"winmm.lib")
-#define PlaySound PlaySoundW
 using namespace std;
 //디코딩 폰트 32
 
@@ -53,7 +50,7 @@ int keyControl() {
 
 //타이틀
 void Title() {
-    PlaySound(TEXT("music.wav"), NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound(TEXT("tt.wav"), NULL, SND_FILENAME | SND_ASYNC);
     //아스키아트
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
     gotoxy(11, 4);

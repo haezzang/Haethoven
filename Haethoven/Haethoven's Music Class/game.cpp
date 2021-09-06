@@ -21,12 +21,7 @@ int over = 0; //게임오버 이유
 string heart = "♥ ♥ ♥";
 
 
-void Stage1(int);
-void Stage2(int);
-void Stage3(int);
-void Stage4(int);
-void Stage5(int);
-void GameClear();
+
 
 void DeleteHeart() { //하트제거
     if (hcnt == 0) { heart = "♥ ♥ ♥";  h = 6; }
@@ -73,44 +68,44 @@ void StartGame() {
     system("cls");
     srand((int)time(0));
 
-
-
+ 
     gotoxy(4, 2);   cout << "게임을 시작하려면 스페이스를 눌러주세요!" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
 
     int c = keyControl(); //입력값
 
     //단계
-    Stage1(40);
-    Stage2(40);
-    Stage3(50);
-    Stage4(55);
-    Stage5(60);
-    GameClear();
+
+        Stage1(40);
+        Stage2(40);
+        Stage3(50);
+        Stage4(55);
+        Stage5(60);
+        GameClear();
 
     system("pause>null");
 }
 
 void GameClear() {
-    x = 5; y = 5; //초기좌표 다시 설정
-    score = 0;
-    hcnt = 0;  //점수, 실수 초기화
-    int h = DeleteHeartX(); //하트 좌표 값 설정
+
 
     system("cls");
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
-    gotoxy(11, 7); cout << " _____   ___  ___  ___ _____   _____  _      _____   ___  ______ " << endl;
-    gotoxy(11, 8);  cout << "|  __ \\ / _ \\ |  \\/  ||  ___| /  __ \\| |    |  ___| / _ \\ | ___ \\" << endl;
-    gotoxy(11, 9); cout << "| |  \\// /_\\ \\| .  . || |__   | /  \\/| |    | |__  / /_\\ \\| |_/ /" << endl;
-    gotoxy(11, 10); cout << "| | __ |  _  || |\\/| ||  __|  | |    | |    |  __| |  _  ||    /  " << endl;
-    gotoxy(11, 11); cout << "| |_\\ \\| | | || |  | || |___  | \\__/\\| |____| |___ | | | || |\\ \\   " << endl;
-    gotoxy(11, 12); cout << "\\____/\\_| |_/\\_|  |_/\\____/   \\____/\\_____/\\____/ \\_| |_/\\_| \\_| " << endl;
-    gotoxy(20, 14);  cout << "모든 스테이지를 성공하셨습니다!" << endl; 
-    gotoxy(22, 16);  cout << "최종 점수 : " << score << endl;
+    gotoxy(9, 3); cout << " _____   ___  ___  ___ _____   _____  _      _____   ___  ______ " << endl;
+    gotoxy(9, 4);  cout << "|  __ \\ / _ \\ |  \\/  ||  ___| /  __ \\| |    |  ___| / _ \\ | ___ \\" << endl;
+    gotoxy(9, 5); cout << "| |  \\// /_\\ \\| .  . || |__   | /  \\/| |    | |__  / /_\\ \\| |_/ /" << endl;
+    gotoxy(9, 6); cout << "| | __ |  _  || |\\/| ||  __|  | |    | |    |  __| |  _  ||    /  " << endl;
+    gotoxy(9, 7); cout << "| |_\\ \\| | | || |  | || |___  | \\__/\\| |____| |___ | | | || |\\ \\   " << endl;
+    gotoxy(9, 8); cout << " \\____/\\_| |_/\\_|  |_/\\____/   \\____/\\_____/\\____/ \\_| |_/\\_| \\_| " << endl;
+    gotoxy(18, 16);  cout << "모든 스테이지를 성공하셨습니다!" << endl; 
+    gotoxy(22, 11);  cout << "최종 점수 : " << score << endl;
     gotoxy(15, 18);  cout << "메인화면으로 돌아가려면 SPACE키를 눌러주세요" << endl;
     system("pause>null");
-
+    x = 5; y = 5; //초기좌표 다시 설정
+    score = 0;
+    hcnt = 0;  //점수, 실수 초기화
+    int h = DeleteHeartX(); //하트 좌표 값 설정
     main();
 }
 //게임오버
@@ -118,17 +113,17 @@ void GameOver() {
    system("cls");
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
-    gotoxy(11, 7); cout << " _____   ___  ___  ___ _____   _____  _   _  _____ ______ " << endl;
-    gotoxy(11, 8);  cout << "|  __ \\ / _ \\ |  \\/  ||  ___| |  _  || | | ||  ___|| ___ \\" << endl;
-    gotoxy(11, 9); cout << "| |  \\// /_\\ \\| .  . || |__   | | | || | | || |__  | |_/ /" << endl;
-    gotoxy(11, 10); cout << "| | __ |  _  || |\\/| ||  __|  | | | || | | ||  __| |    / " << endl;
-    gotoxy(11, 11); cout << "| |_\\ \\| | | || |  | || |___  \\ \\_/ /\\ \\_/ /| |___ | |\\ \\  " << endl;
-    gotoxy(11, 12); cout << " \\____/\\_| |_/\\_|  |_/\\____/   \\___/  \\___/ \\____/ \\_| \\_| " << endl;
+    gotoxy(11, 3); cout << " _____   ___  ___  ___ _____   _____  _   _  _____ ______ " << endl;
+    gotoxy(11, 4);  cout << "|  __ \\ / _ \\ |  \\/  ||  ___| |  _  || | | ||  ___|| ___ \\" << endl;
+    gotoxy(11, 5); cout << "| |  \\// /_\\ \\| .  . || |__   | | | || | | || |__  | |_/ /" << endl;
+    gotoxy(11, 6); cout << "| | __ |  _  || |\\/| ||  __|  | | | || | | ||  __| |    / " << endl;
+    gotoxy(11, 7); cout << "| |_\\ \\| | | || |  | || |___  \\ \\_/ /\\ \\_/ /| |___ | |\\ \\  " << endl;
+    gotoxy(11, 8); cout << " \\____/\\_| |_/\\_|  |_/\\____/   \\___/  \\___/ \\____/ \\_| \\_| " << endl;
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    if (over == 1) { gotoxy(20, 14);  cout << "시간이 초과 되었습니다" << endl; }
-    else if (over == 0) { gotoxy(20, 14);  cout << "3번 이상 실수 하셨습니다" << endl; }
-    gotoxy(22, 16);  cout <<"최종 점수 : " << score << endl;
+    if (over == 1) { gotoxy(20, 16);  cout << "시간이 초과 되었습니다" << endl; }
+    else if (over == 0) { gotoxy(20, 16);  cout << "3번 이상 실수 하셨습니다" << endl; }
+    gotoxy(22, 11);  cout <<"최종 점수 : " << score << endl;
     gotoxy(15, 18);  cout << "메인화면으로 돌아가려면 SPACE키를 눌러주세요" << endl;
 
     system("pause>null");
@@ -171,8 +166,6 @@ void Check(int step,int answer[], int max, int x, int y) {
         cout << score << "점" << endl;
 
         int n = keyControl(); //입력값
-
-
         //방향키 제거
 
         if (step == 1) { //1단계
@@ -254,6 +247,7 @@ void Check(int step,int answer[], int max, int x, int y) {
 
 
 void Stage1(int max) {
+    PlaySound(TEXT("pickme.wav"), NULL, SND_FILENAME | SND_ASYNC);
     Record(); //점수 기록판
     DeleteHeart(); //하트수 판단
     int answer[40] = { 0, }; //답체크
