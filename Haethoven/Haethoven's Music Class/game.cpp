@@ -4,21 +4,26 @@ using namespace std;
 
 
 
-//전역변수
+//전역변수+클래스에 넣어야할 것
+int tt = 0; //누적 초
+int hcnt = 0; //실수 횟수
+string heart = "♥ ♥ ♥";
 extern string name;
 int score = 0;
-string str[5] = { "←","→","↑","↓","●" };
+
+
+
 
 int x = 5;
 int y = 5; //초기 위치
 int rn; //문제 랜덤
-int hcnt = 0; //실수 횟수
+
 int clr[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
 int clrRn;//컬러 랜덤 인덱스
 int h; //하트 좌표 값 
-int tt = 0; //누적 초
-int over = 0; //게임오버 이유
-string heart = "♥ ♥ ♥";
+boolean over = true; //게임오버 이유
+string str[5] = { "←","→","↑","↓","●" };
+
 
 
 
@@ -86,6 +91,7 @@ void StartGame() {
     system("pause>null");
 }
 
+//게임클리어
 void GameClear() {
 
 
@@ -121,8 +127,8 @@ void GameOver() {
     gotoxy(11, 8); cout << " \\____/\\_| |_/\\_|  |_/\\____/   \\___/  \\___/ \\____/ \\_| \\_| " << endl;
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    if (over == 1) { gotoxy(20, 16);  cout << "시간이 초과 되었습니다" << endl; }
-    else if (over == 0) { gotoxy(20, 16);  cout << "3번 이상 실수 하셨습니다" << endl; }
+    if (over == true) { gotoxy(20, 16);  cout << "시간이 초과 되었습니다" << endl; }
+    else if (over == false) { gotoxy(20, 16);  cout << "3번 이상 실수 하셨습니다" << endl; }
     gotoxy(22, 11);  cout <<"최종 점수 : " << score << endl;
     gotoxy(15, 18);  cout << "메인화면으로 돌아가려면 SPACE키를 눌러주세요" << endl;
 
@@ -137,12 +143,13 @@ void GameOver() {
 }
 
 
-clock_t old_time, cur_time; //시간체크
+clock_t old_time, cur_time; //시간체크 변수
 
 //정답 판단
-// 단계/입력값/문제수/좌표
+// 단계/입력값/문제수/시작좌표
 void Check(int step,int answer[], int max, int x, int y) {
-
+    
+   
     old_time = clock();    //시작 시간
    
     int i = 0;
@@ -152,22 +159,21 @@ void Check(int step,int answer[], int max, int x, int y) {
 
         cur_time = clock();  //현재  시간
 
-        //시간초과 게임오버
+        //시간초과 게임오버1
         if (((double)(cur_time - old_time) / CLOCKS_PER_SEC) > 25) {
-            over = 1;  GameOver();  break;
+            over = true;  GameOver();  break;
         } 
-        //실수3번 게임오버
+        //실수3번 게임오버2
         else if (hcnt == 3) {  
-            over = 0;   GameOver(); break;
+            over = false;   GameOver(); break;
         } 
 
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
         gotoxy(37, 10);
         cout << score << "점" << endl;
 
-        int n = keyControl(); //입력값
+        int n = keyControl(); //정답 입력
         //방향키 제거
-
         if (step == 1) { //1단계
             if (i < 19) { gotoxy(x--, y);   cout << " "; }
             else  if (i < 21) { gotoxy(x, y++);   cout << " "; }
