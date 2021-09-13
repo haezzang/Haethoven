@@ -40,7 +40,7 @@ enum Color
 
 
 //함수 정의
-void Rank(); //랭킹회면
+void PrintRankTitle(); //랭킹회면
 void Info(); //정보화면
 void Title(); //게임제목
 int Menu(); //메뉴선택
@@ -56,6 +56,9 @@ void Stage5(int); //맵2
 void GameClear();
 void GameOver(); //게임오버
 int main(); //메인
+
+
+
 
 //좌표함수
 void gotoxy(int x, int y);

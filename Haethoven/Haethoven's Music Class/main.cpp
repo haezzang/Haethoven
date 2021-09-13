@@ -155,8 +155,7 @@ void Info() {
     system("pause>null");
 }
 
-//랭킹
-extern void Rank();
+
 //메인함수
 int main(void) {
 
@@ -166,7 +165,7 @@ int main(void) {
         Title();
         switch (Menu()) {
         case 0: Info(); break; //게임시작
-        case 2: Rank(); break; //랭킹보기
+        case 2: PrintRankTitle(); break; //랭킹보기
         case 4:  return 0;//게임종료
         }
         system("cls");
