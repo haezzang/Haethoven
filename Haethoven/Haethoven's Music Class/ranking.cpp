@@ -14,13 +14,7 @@ int cnt = 0;
 
 
 void Rank() {
-	//게임이 끝나면 점수를 저장 >성공
-	//파일 입력하기 >랭킹 들어갈때마다 데이터가 추가됌 고칠것
-	//게임유저만큼 반복문 돌려 순위 구하기 >유저이름만 하면 끝
-	//5위까지만 파일 출력하기 >성공
-	
 
-	
 	//데이터 갯수 세기
 	ifstream fin;
 	fin.open("rank.txt");
@@ -37,7 +31,7 @@ void Rank() {
 		ifstream f;
 		f.open("rank.txt");
 		if (f.is_open()) {
-			for (int i = 0; i <cnt-1; i++) {
+			for (int i = 0; i <cnt; i++) {
 				f >> user[i];
 				f >> user_score[i];
 			cout << user[i] << user_score[i] << endl;
@@ -50,26 +44,31 @@ void Rank() {
 
 		//오름차순 정렬하기
 		int key;
-		for (int i = 0; i <cnt-1; i++) {
-			for (int j = 0; j < cnt-1- i; j++) {
+		for (int i = 0; i <cnt; i++) {
+			for (int j = 0; j < cnt- i; j++) {
 				if (user_score[j] < user_score[j + 1]) {
 					int temp = user_score[j];
 					user_score[j] = user_score[j + 1];
 					user_score[j + 1] = temp;
-					key = j + 1;
-					user[key];
+					string temp2 = user[j];
+					user[j] = user[j + 1];
+					user[j + 1] = temp2;
 				}
 			}
+			
 		}
+		cnt = 0;
 
 		//순위 print
 		int y = 8;
 		int num = 1;
 		
+		//5위까지 출력
 		for (int i = 0; i <5; i++) {
-			gotoxy(22, y+=2);
+			gotoxy(20, y+=2);
 			cout <<num++<<"위 "<< user[i] << "  " << user_score[i] << "점" << endl;
 		}
+		gotoxy(19, 20); cout << "스페이스 눌러 돌아가기" << endl;
 }
 
 
@@ -84,7 +83,9 @@ void PrintRankTitle() {
 	gotoxy(13, 5); cout << "|    / |  _  || . ` ||    \\   | |  | . ` || | __ " << endl;
 	gotoxy(13, 6); cout << "| |\\ \\ | | | || |\\  || |\\  \\ _| |_ | |\\  || |_\\ \\ " << endl;
 	gotoxy(13, 7); cout << "\\_| \\_|\\_| |_/\\_| \\_/\\_| \\_/ \\___/ \\_| \\_/ \\____/" << endl;
+
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+	
 	Rank();
 	system("pause>null");
 }
