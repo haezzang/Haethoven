@@ -3,6 +3,9 @@
 #include<conio.h>
 #include <time.h>
 #include <mmsystem.h>
+#include<fstream>
+#include<iomanip>
+#include<string>
 #pragma comment(lib,"winmm.lib")
 
 
@@ -44,7 +47,7 @@ void PrintRankTitle(); //랭킹회면
 void Info(); //정보화면
 void Title(); //게임제목
 int Menu(); //메뉴선택
-void Check(int); //게임점수 판단
+void Check(int,int,int,int,int); //게임점수 판단
 void StartGame(); //게임화면
 void Record(); //게임 점수 기록판
 int keyControl(); //입력값 

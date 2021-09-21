@@ -1,7 +1,5 @@
 #include "haethoven.h"
-#include<fstream>
-#include<iomanip>
-#include<string>
+
 using namespace std;
 //디코딩 폰트 32
 
@@ -23,7 +21,7 @@ void Rank() {
 	{
 		if (getline(fin, line)) cnt++;
 	} 
-	cout << "데이터 갯수 : " << cnt << endl;
+	cout << "데이터갯수:"<<cnt << endl;
 	fin.close();
 
 
@@ -34,7 +32,6 @@ void Rank() {
 			for (int i = 0; i <cnt; i++) {
 				f >> user[i];
 				f >> user_score[i];
-			cout << user[i] << user_score[i] << endl;
 			}
 		}
 		else {
@@ -60,7 +57,7 @@ void Rank() {
 		cnt = 0;
 
 		//순위 print
-		int y = 8;
+		int y = 7;
 		int num = 1;
 		
 		//5위까지 출력
@@ -68,7 +65,8 @@ void Rank() {
 			gotoxy(20, y+=2);
 			cout <<num++<<"위 "<< user[i] << "  " << user_score[i] << "점" << endl;
 		}
-		gotoxy(19, 20); cout << "스페이스 눌러 돌아가기" << endl;
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
+		gotoxy(19, 19); cout << "스페이스 눌러 돌아가기" << endl;
 }
 
 

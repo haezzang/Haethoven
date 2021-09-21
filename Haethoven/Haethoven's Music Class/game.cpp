@@ -1,6 +1,5 @@
 #include "haethoven.h"
-#include<fstream>
-#include<iomanip>
+#include <thread>
 using namespace std;
 
 
@@ -24,11 +23,21 @@ int h; //하트 좌표 값
 boolean over = true; //게임오버 이유
 string str[5] = { "←","→","↑","↓","●" };
 
+//void Timer() {
+//    tt = 25;
+//    while (tt >0) {
+//        Sleep(1000);
+//        gotoxy(37, 13); cout << tt--<<"초 ";
+//    }
+//
+//}
+
+
 
 //점수 저장
 void Save() {
     ofstream fout("rank.txt", ios::app);
-    fout <<name<<"\t"<<score << endl;
+    fout <<name<<"\t"<<score<< endl;
     fout.close();
 }
 
@@ -62,10 +71,9 @@ void Record() {
     cout << "S C O R E" << endl;
     gotoxy(37, 10);
     cout << score << "점" << endl;
-    gotoxy(37, 12);
-    cout << "누적초" << endl;
-    gotoxy(37, 13);
-    cout << tt << "초" << endl;
+    gotoxy(36, 12);
+    cout << "남은 시간" << endl;
+  
     gotoxy(31, 15);
     cout << "└────────────────────────────┘" << endl;
 
@@ -78,12 +86,12 @@ void StartGame() {
     system("cls");
     srand((int)time(0));
 
-
     gotoxy(4, 2);   cout << "게임을 시작하려면 스페이스를 눌러주세요!" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    
 
     int c = keyControl(); //입력값
-
+   
     //단계
 
     Stage1(40);
@@ -92,7 +100,7 @@ void StartGame() {
     Stage4(55);
     Stage5(60);
     GameClear();
-
+  
     system("pause>null");
 }
 
@@ -136,7 +144,7 @@ void GameOver() {
     else if (over == false) { gotoxy(20, 16);  cout << "3번 이상 실수 하셨습니다" << endl; }
     gotoxy(22, 11);  cout << "최종 점수 : " << score << endl;
     gotoxy(15, 18);  cout << "메인화면으로 돌아가려면 SPACE키를 눌러주세요" << endl;
-
+    // t1.detach();
     system("pause>null");
     Save();
     x = 5; y = 5; //초기좌표 다시 설정
@@ -147,42 +155,27 @@ void GameOver() {
     main();
 }
 
-
-clock_t old_time, cur_time; //시간체크 변수
-
 //정답 판단
 // 단계/입력값/문제수/시작좌표
 void Check(int step, int answer[], int max, int x, int y) {
 
-
-    old_time = clock();    //시작 시간
-
     int i = 0;
     int h = DeleteHeartX(); //하트 좌표 값 설정
-
     while (i < max) {
-
-        cur_time = clock();  //현재  시간
-
-        //시간초과 게임오버1
-        if (((double)(cur_time - old_time) / CLOCKS_PER_SEC) > 25) {
-            over = true;  GameOver();  break;
-        }
-        //실수3번 게임오버2
-        else if (hcnt == 3) {
-            over = false;   GameOver(); break;
-        }
-
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
         gotoxy(37, 10);
         cout << score << "점" << endl;
-
+        //실수3번 게임오버2
+       
+      if (hcnt == 3) {
+           over = false;   GameOver();
+        }
         int n = keyControl(); //정답 입력
         //방향키 제거
         if (step == 1) { //1단계
             if (i < 19) { gotoxy(x--, y);   cout << " "; }
-            else  if (i < 21) { gotoxy(x, y++);   cout << " "; }
-            else if (i < 50) { gotoxy(x++, y);  cout << " "; }
+            else  if (i < 21) { gotoxy(x, y++);   cout << " ";}
+            else if (i < 50) { gotoxy(x++, y);  cout << " ";}
         }
         else  if (step == 2) { //2단계
             switch (i / 5)
@@ -250,7 +243,6 @@ void Check(int step, int answer[], int max, int x, int y) {
         }
         i++;
     }
-    tt += ((double)(cur_time - old_time) / CLOCKS_PER_SEC); //누적 초 계산
 }
 
 

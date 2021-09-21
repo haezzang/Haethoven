@@ -132,24 +132,30 @@ int Menu() {
 //게임설명
 void Info() {
     system("cls");
-    /*  gotoxy(15, 3);
-      cout << "18세기에 베토벤이 있다면 21세기엔 해토벤이 있다?" << endl;*/
-    gotoxy(25, 5);
+    cout << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+    cout << "\"18세기에 베토벤이 있다면 21세기엔 해토벤이 있다?\"" << endl<<endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     cout << "<게 임 설 명>" << endl;
-    gotoxy(12, 7);
-    cout << "키보드 방향키 → ← ↑ ↓와 스페이스 키 ● 를 사용하여 점수를 올리세요! " << endl;
-    gotoxy(17, 9);
-    cout << "기회는 3번! 125초 안에 많은 점수를 획득하세요!" << endl;
-    gotoxy(17, 11);
-    cout << "ESC를 누르면 메인화면으로 이동 할 수있습니다!" << endl;
-    gotoxy(16, 13);
-    cout << "해토벤이 될 수있는 기회! 지금 랭킹 올리러 가볼까요?" << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CYAN);
+    cout << "→ ← ↑ ↓";
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    cout << " 는 방향키!  ";
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CYAN);
+    cout<<"●" ;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    cout << " 는 스페이스!"<<endl;
+    cout << "옳은 키를 눌러 점수를 획득하세요." <<endl<<endl;
+    cout << "기회는 3번이며, 제한시간안에 스테이지를 클리어 하세요." <<endl<< endl;
+    cout << "ESC를 누르면 메인화면으로 이동할 수 있습니다." <<endl<< endl;
+
+    cout << "해토벤이 될 수있는 기회! 즐거운 피아노 연주하러 떠나볼까요?" <<endl<< endl;
 
     //이름받기
-    gotoxy(24, 15);
-    cout << "이름을 입력하세요!" << endl;
-    gotoxy(24, 17);
-    cout << ">";
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+    cout << " 이름을 입력해주세요." << endl;
+    cout << " >";
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     cin >> name;
     StartGame();
     system("pause>null");
