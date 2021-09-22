@@ -6,7 +6,7 @@ using namespace std;
 
 
 //전역변수+클래스에 넣어야할 것
-int tt = 0; //누적 초
+int tt = 25; //누적 초
 int hcnt = 0; //실수 횟수
 string heart = "♥ ♥ ♥";
 extern string name;
@@ -20,17 +20,10 @@ int rn; //문제 랜덤
 int clr[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
 int clrRn;//컬러 랜덤 인덱스
 int h; //하트 좌표 값 
-boolean over = true; //게임오버 이유
+int over =1; //게임오버 이유
 string str[5] = { "←","→","↑","↓","●" };
 
-//void Timer() {
-//    tt = 25;
-//    while (tt >0) {
-//        Sleep(1000);
-//        gotoxy(37, 13); cout << tt--<<"초 ";
-//    }
-//
-//}
+
 
 
 
@@ -59,10 +52,21 @@ int DeleteHeartX() { //하트제거 X좌표
 
 }
 
+void timer() {
+    tt = 100;
+    while (1) {
+        if (tt == 0 || hcnt == 3) break;
+        gotoxy(37, 13); cout << tt << "초  ";
+        Sleep(1000);
+        --tt;
+    }
+    over = 0;
+}
 
 
 //점수판과 제한시간
 void Record() {
+
     gotoxy(31, 6);
     cout << "> " << name << " < 게임중" << endl;
     gotoxy(31, 7);
@@ -72,36 +76,33 @@ void Record() {
     gotoxy(37, 10);
     cout << score << "점" << endl;
     gotoxy(36, 12);
-    cout << "남은 시간" << endl;
+    cout << "제한 시간" << endl;
   
     gotoxy(31, 15);
     cout << "└────────────────────────────┘" << endl;
 
-
 }
-
 
 //게임실행화면
 void StartGame() {
+    thread t1(timer);
     system("cls");
     srand((int)time(0));
-
     gotoxy(4, 2);   cout << "게임을 시작하려면 스페이스를 눌러주세요!" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    
-
+  
     int c = keyControl(); //입력값
-   
     //단계
-
     Stage1(40);
     Stage2(40);
     Stage3(50);
     Stage4(55);
     Stage5(60);
     GameClear();
-  
+
+
     system("pause>null");
+    t1.join();
 }
 
 //게임클리어
@@ -140,9 +141,7 @@ void GameOver() {
     gotoxy(11, 8); cout << " \\____/\\_| |_/\\_|  |_/\\____/   \\___/  \\___/ \\____/ \\_| \\_| " << endl;
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    if (over == true) { gotoxy(20, 16);  cout << "시간이 초과 되었습니다" << endl; }
-    else if (over == false) { gotoxy(20, 16);  cout << "3번 이상 실수 하셨습니다" << endl; }
-    gotoxy(22, 11);  cout << "최종 점수 : " << score << endl;
+    gotoxy(22, 13);  cout << "최종 점수 : " << score << endl;
     gotoxy(15, 18);  cout << "메인화면으로 돌아가려면 SPACE키를 눌러주세요" << endl;
     // t1.detach();
     system("pause>null");
@@ -150,6 +149,7 @@ void GameOver() {
     x = 5; y = 5; //초기좌표 다시 설정
     score = 0;
     hcnt = 0;  //점수, 실수 초기화
+    over = 1;
     int h = DeleteHeartX(); //하트 좌표 값 설정
 
     main();
@@ -158,24 +158,24 @@ void GameOver() {
 //정답 판단
 // 단계/입력값/문제수/시작좌표
 void Check(int step, int answer[], int max, int x, int y) {
-
+ 
     int i = 0;
     int h = DeleteHeartX(); //하트 좌표 값 설정
     while (i < max) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
         gotoxy(37, 10);
         cout << score << "점" << endl;
-        //실수3번 게임오버2
-       
-      if (hcnt == 3) {
-           over = false;   GameOver();
+        //실수3번 타임오버
+        if (hcnt == 3 || over == 0) {
+            GameOver();
         }
+ 
         int n = keyControl(); //정답 입력
         //방향키 제거
         if (step == 1) { //1단계
-            if (i < 19) { gotoxy(x--, y);   cout << " "; }
-            else  if (i < 21) { gotoxy(x, y++);   cout << " ";}
-            else if (i < 50) { gotoxy(x++, y);  cout << " ";}
+            if (i < 19) { gotoxy(x--, y);   cout << "♪"; }
+            else  if (i < 21) { gotoxy(x, y++);   cout << "♪"; }
+            else if (i < 50) { gotoxy(x++, y);   cout << "♪"; }
         }
         else  if (step == 2) { //2단계
             switch (i / 5)
@@ -248,9 +248,8 @@ void Check(int step, int answer[], int max, int x, int y) {
 
 
 
-
 void Stage1(int max) {
-   PlaySound(TEXT("pickme.wav"), NULL, SND_FILENAME | SND_ASYNC);
+    PlaySound(TEXT("pickme.wav"), NULL, SND_FILENAME | SND_ASYNC);
     Record(); //점수 기록판
     DeleteHeart(); //하트수 판단
     int answer[40] = { 0, }; //답체크
@@ -278,8 +277,12 @@ void Stage1(int max) {
         }
     }
     Check(1, answer, 40, 25, 10);
+ 
     system("cls");
+
 }
+
+
 void Stage2(int max) {
     Record(); //점수 기록판
     DeleteHeart(); //하트수 판단

@@ -133,7 +133,7 @@ int Menu() {
 void Info() {
     system("cls");
     cout << endl;
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
     cout << "\"18세기에 베토벤이 있다면 21세기엔 해토벤이 있다?\"" << endl<<endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     cout << "<게 임 설 명>" << endl;
@@ -146,13 +146,13 @@ void Info() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     cout << " 는 스페이스!"<<endl;
     cout << "옳은 키를 눌러 점수를 획득하세요." <<endl<<endl;
-    cout << "기회는 3번이며, 제한시간안에 스테이지를 클리어 하세요." <<endl<< endl;
+    cout << "기회는 3번이며, 제한시간 안에 스테이지를 클리어 하세요." <<endl<< endl;
     cout << "ESC를 누르면 메인화면으로 이동할 수 있습니다." <<endl<< endl;
 
     cout << "해토벤이 될 수있는 기회! 즐거운 피아노 연주하러 떠나볼까요?" <<endl<< endl;
 
     //이름받기
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
     cout << " 이름을 입력해주세요." << endl;
     cout << " >";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
