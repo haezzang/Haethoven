@@ -21,7 +21,7 @@ void Rank() {
 	{
 		if (getline(fin, line)) cnt++;
 	} 
-	cout << "데이터갯수:"<<cnt << endl;
+	cout << "참여자 수:"<<cnt << endl;
 	fin.close();
 
 
@@ -40,7 +40,6 @@ void Rank() {
 		f.close();
 
 		//오름차순 정렬하기
-		int key;
 		for (int i = 0; i <cnt; i++) {
 			for (int j = 0; j < cnt- i; j++) {
 				if (user_score[j] < user_score[j + 1]) {

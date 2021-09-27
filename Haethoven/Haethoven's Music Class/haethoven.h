@@ -16,7 +16,7 @@
 #define RIGHT  3
 #define LEFT  4
 #define SPACE 5
-#define ESC 6
+
 
 
 //색깔 정의
@@ -65,4 +65,8 @@ int main(); //메인
 
 //좌표함수
 void gotoxy(int x, int y);
+
+//커서 없애는 함수
+void CursorView();
+
 

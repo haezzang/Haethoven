@@ -19,7 +19,14 @@ void gotoxy(int x, int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
 
-
+//커서없애기
+void CursorView()
+{
+    CONSOLE_CURSOR_INFO cursorInfo = { 0, };
+    cursorInfo.dwSize = 1; //커서 굵기 (1 ~ 100)
+    cursorInfo.bVisible = FALSE; //커서 Visible TRUE(보임) FALSE(숨김)
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+}
 
 //키보드 입력 제어
 int keyControl() {
@@ -165,15 +172,16 @@ void Info() {
 //메인함수
 int main(void) {
 
-
+    CursorView();
     system("mode con: cols=100 lines=22"); //가로 세로 콘솔크기 추가
     while (true) {
         Title();
         switch (Menu()) {
         case 0: Info(); break; //게임시작
         case 2: PrintRankTitle(); break; //랭킹보기
-        case 4:  return 0;//게임종료
+        case 4: exit(0);  break; // 게임종료
         }
+       
         system("cls");
     }
 }
