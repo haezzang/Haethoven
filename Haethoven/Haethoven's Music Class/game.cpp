@@ -16,6 +16,7 @@ int score = 0;
 int x = 5;
 int y = 5; //초기 위치
 int rn; //문제 랜덤
+int songRn;//노래 랜덤
 
 int clr[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
 int clrRn;//컬러 랜덤 인덱스
@@ -55,14 +56,17 @@ int DeleteHeartX() { //하트제거 X좌표
 }
 
 void timer() {
-    tt = 100;
+    tt = 102;
     while (1) {
         if (tt == 0 || hcnt == 3 || clear==0) break;
+      
         gotoxy(37, 13); cout << tt << "초  ";
         Sleep(1000);
         --tt;
+        if (tt ==0) { GameOver(); break; }
     }
-    over = 0;
+
+    //over = 0;
 }
 
 //정보리셋
@@ -77,28 +81,39 @@ void Reset() {
 //점수판과 제한시간
 void Record() {
 
-    gotoxy(31, 6);
-    cout << "> " << name << " < 게임중" << endl;
-    gotoxy(31, 7);
-    cout << "┌────────────────────────────┐" << endl;
-    gotoxy(36, 9);
-    cout << "S C O R E" << endl;
-    gotoxy(37, 10);
-    cout << score << "점" << endl;
-    gotoxy(36, 12);
-    cout << "제한 시간" << endl;
-  
-    gotoxy(31, 15);
-    cout << "└────────────────────────────┘" << endl;
+    gotoxy(31, 6); cout << "> " << name << " < 게임중" << endl;
+    gotoxy(31, 7); cout << "┌────────────────────────────┐" << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BLUE);
+    gotoxy(36, 9); cout << "S C O R E" << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    gotoxy(37, 10); cout << score << "점" << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
+    gotoxy(36, 12); cout << "제한 시간" << endl; 
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    gotoxy(31, 15); cout << "└────────────────────────────┘" << endl;
 
 }
 
 //게임실행화면
 void StartGame() {
-     thread t1(timer);
+    thread t1(timer);
+    int songRn= rand() % 5;
+  
+    //노래 랜덤
+    switch (songRn)
+    {
+    case 0:   PlaySound(TEXT("ddd.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+    case 1:   PlaySound(TEXT("dynamite.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+    case 2:   PlaySound(TEXT("diveintoyou.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+    case 3:   PlaySound(TEXT("lovesickgirls.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+    case 4:   PlaySound(TEXT("whatislove.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+    }
+    system("cls");
+    gotoxy(20, 10);  cout << "2초후 시작" << endl;
+    Sleep(1000);
     system("cls");
     srand((int)time(0));
-   
+
     //단계
         Stage1(40);
         Stage2(40);
@@ -165,7 +180,7 @@ void Check(int step, int answer[], int max, int x, int y) {
         gotoxy(37, 10);
         cout << score << "점" << endl;
         //실수3번 타임오버
-        if (hcnt == 3 || over == 0) {
+        if (hcnt == 3) {
             GameOver();
         }
  
@@ -248,7 +263,7 @@ void Check(int step, int answer[], int max, int x, int y) {
 
 
 void Stage1(int max) {
-    PlaySound(TEXT("pickme.wav"), NULL, SND_FILENAME | SND_ASYNC);
+
     Record(); //점수 기록판
     DeleteHeart(); //하트수 판단
     int answer[40] = { 0, }; //답체크

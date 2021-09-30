@@ -155,19 +155,20 @@ void Info() {
     cout << "옳은 키를 눌러 점수를 획득하세요." <<endl<<endl;
     cout << "기회는 3번이며, 제한시간 안에 스테이지를 클리어 하세요." <<endl<< endl;
     cout << "ESC를 누르면 메인화면으로 이동할 수 있습니다." <<endl<< endl;
-
-    cout << "해토벤이 될 수있는 기회! 즐거운 피아노 연주하러 떠나볼까요?" <<endl<< endl;
-    gotoxy(32, 13); cout << "                    |~~~~~~|" << endl;
-    gotoxy(32, 14); cout << " o    |~~~|         |~~~~~~|" << endl;
-    gotoxy(32, 15); cout << "/\\_  _|   |         |      |" << endl;
-    gotoxy(32, 16); cout << "\\__`[_    |     /~~\\|  /~~\\|  " << endl;
-    gotoxy(32, 17); cout << "][ \\,/|___|     \\__/   \\__/"<< endl;
+    cout << "해토벤이 될 수있는 기회! 즐거운 피아노 연주하러 떠나볼까요?" << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CYAN);
+    gotoxy(32, 14); cout << "                    |~~~~~~|" << endl;
+    gotoxy(32, 15); cout << " o    |~~~|         |~~~~~~|" << endl;
+    gotoxy(32, 16); cout << "/\\_  _|   |         |      |" << endl;
+    gotoxy(32, 17); cout << "\\__`[_    |     /~~\\|  /~~\\|  " << endl;
+    gotoxy(32, 18); cout << "][ \\,/|___|     \\__/   \\__/" << endl;
     //이름받기
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
-    gotoxy(1, 13); cout << " 이름을 입력해주세요." << endl;
-    gotoxy(1, 14);   cout << " >";
+    gotoxy(0, 12); cout << " 이름을 입력해주세요." << endl;
+    gotoxy(0, 13);  cout << " >";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     cin >> name;
+
     StartGame();
     system("pause>null");
 }
