@@ -144,11 +144,11 @@ void Info() {
     cout << "\"18세기에 베토벤이 있다면 21세기엔 해토벤이 있다?\"" << endl<<endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     cout << "<게 임 설 명>" << endl;
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CYAN);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
     cout << "→ ← ↑ ↓";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     cout << " 는 방향키!  ";
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CYAN);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
     cout<<"●" ;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     cout << " 는 스페이스!"<<endl;
@@ -157,11 +157,15 @@ void Info() {
     cout << "ESC를 누르면 메인화면으로 이동할 수 있습니다." <<endl<< endl;
 
     cout << "해토벤이 될 수있는 기회! 즐거운 피아노 연주하러 떠나볼까요?" <<endl<< endl;
-
+    gotoxy(32, 13); cout << "                    |~~~~~~|" << endl;
+    gotoxy(32, 14); cout << " o    |~~~|         |~~~~~~|" << endl;
+    gotoxy(32, 15); cout << "/\\_  _|   |         |      |" << endl;
+    gotoxy(32, 16); cout << "\\__`[_    |     /~~\\|  /~~\\|  " << endl;
+    gotoxy(32, 17); cout << "][ \\,/|___|     \\__/   \\__/"<< endl;
     //이름받기
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
-    cout << " 이름을 입력해주세요." << endl;
-    cout << " >";
+    gotoxy(1, 13); cout << " 이름을 입력해주세요." << endl;
+    gotoxy(1, 14);   cout << " >";
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     cin >> name;
     StartGame();
