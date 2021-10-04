@@ -1,153 +1,166 @@
-#include "haethoven.h"
+ï»¿#include "haethoven.h"
 #include <thread>
 using namespace std;
 
 
 
 
-//Àü¿ªº¯¼ö
-int tt; //Å¸ÀÌ¸Ó
-int hcnt = 0; //½Ç¼ö È½¼ö
-string heart = "¢¾ ¢¾ ¢¾";
-extern string name;
-int score = 0;
-
-
+//ì „ì—­ë³€ìˆ˜
+int tt; //íƒ€ì´ë¨¸
+int hcnt = 0; //ì‹¤ìˆ˜ íšŸìˆ˜
+int scnt = 0; //ìŠ¤í…Œì´ì§€ ë‹¨ê³„
+string heart = "â™¥ â™¥ â™¥";
+extern string name; //ìœ ì € ë„¤ì„
+int score = 0; //ì ìˆ˜
+int n = -1; //ì…ë ¥ê°’
+int res; //ì •ë‹µ íŒë‹¨ ìœ„ì¹˜
+string SongName = ""; //ë…¸ë˜ ì´ë¦„
 int x = 5;
-int y = 5; //ÃÊ±â À§Ä¡
-int rn; //¹®Á¦ ·£´ı
-int songRn;//³ë·¡ ·£´ı
-
-int clr[6] = { 9,10,11,12,13,14 }; //ÄÃ·¯ ·£´ı
-int clrRn;//ÄÃ·¯ ·£´ı ÀÎµ¦½º
-int h; //ÇÏÆ® ÁÂÇ¥ °ª 
-int over =1; //°ÔÀÓ¿À¹ö
-int clear = 1; //°ÔÀÓÅ¬¸®¾î
-
-string str[5] = { "¡ç","¡æ","¡è","¡é","¡Ü" };
+int y = 5; //ì´ˆê¸° ìœ„ì¹˜
+int rn; //ë¬¸ì œ ëœë¤
+int songRn;//ë…¸ë˜ ëœë¤
+int clr[6] = { 9,10,11,12,13,14 }; //ì»¬ëŸ¬ ëœë¤
+int clrRn;//ì»¬ëŸ¬ ëœë¤ ì¸ë±ìŠ¤
+string str[5] = { "â†","â†’","â†‘","â†“","â—" };
 
 
 
 
 
-//Á¡¼ö ÀúÀå
+//ì ìˆ˜ ì €ì¥
 void Save() {
+
     ofstream fout("rank.txt", ios::app);
-    fout <<name<<"\t"<<score<< endl;
+    fout << name << "\t" << score << endl;
     fout.close();
 }
 
 
-void DeleteHeart() { //ÇÏÆ®Á¦°Å
-    if (hcnt == 0) { heart = "¢¾ ¢¾ ¢¾";  h = 6; }
-    else if (hcnt == 1) { heart = "¢¾ ¢¾"; h = 5; }
-    else if (hcnt == 2) { heart = " ¢¾"; h = 4; }
+void DeleteHeart() { //í•˜íŠ¸ì œê±°
+    if (hcnt == 0) { heart = "â™¥ â™¥ â™¥"; }
+    else if (hcnt == 1) { heart = "â™¥ â™¥      "; }
+    else if (hcnt == 2) { heart = " â™¥     "; }
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
     gotoxy(4, 3);   cout << heart << endl;
 
 }
 
-int DeleteHeartX() { //ÇÏÆ®Á¦°Å XÁÂÇ¥
-    if (hcnt == 0) { h = 6; }
-    else if (hcnt == 1) { h = 5; }
-    else if (hcnt == 2) { h = 4; }
-    return h;
+//void timer() {
+//    Sleep(2000);
+//    tt = 0;
+//    while (hcnt==3){
+//        gotoxy(37, 13); cout << tt++<< "ì´ˆ  ";
+//        Sleep(1000);
+//       
+//    }
+//
+//}
 
-}
-
-void timer() {
-    tt = 102;
-    while (1) {
-        if (tt == 0 || hcnt == 3 || clear==0) break;
-      
-        gotoxy(37, 13); cout << tt << "ÃÊ  ";
-        Sleep(1000);
-        --tt;
-        if (tt ==0) { GameOver(); break; }
-    }
-
-    //over = 0;
-}
-
-//Á¤º¸¸®¼Â
+//ì •ë³´ë¦¬ì…‹
 void Reset() {
     Save();
-    x = 5; y = 5; //ÃÊ±âÁÂÇ¥ ´Ù½Ã ¼³Á¤
+    x = 5; y = 5; //ì´ˆê¸°ì¢Œí‘œ ë‹¤ì‹œ ì„¤ì •
     score = 0;
-    hcnt = 0;  //Á¡¼ö, ½Ç¼ö ÃÊ±âÈ­
-    over = 1;
-    int h = DeleteHeartX(); //ÇÏÆ® ÁÂÇ¥ °ª ¼³Á¤
+    hcnt = 0;  //ì ìˆ˜, ì‹¤ìˆ˜ ì´ˆê¸°í™”
 }
-//Á¡¼öÆÇ°ú Á¦ÇÑ½Ã°£
-void Record() {
 
-    gotoxy(31, 6); cout << "> " << name << " < °ÔÀÓÁß" << endl;
-    gotoxy(31, 7); cout << "¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤" << endl;
+//ì ìˆ˜íŒê³¼ ì œí•œì‹œê°„
+void Record() {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    gotoxy(31, 6); cout << "> " << name << " < ê²Œì„ì¤‘" << endl;
+    gotoxy(31, 7); cout << "â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BLUE);
     gotoxy(36, 9); cout << "S C O R E" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(37, 10); cout << score << "Á¡" << endl;
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
-    gotoxy(36, 12); cout << "Á¦ÇÑ ½Ã°£" << endl; 
+    gotoxy(37, 10); cout << score << "ì " << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BROWN);
+    gotoxy(36, 12); cout << "ì œí•œ ì‹œê°„" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(31, 15); cout << "¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥" << endl;
+    gotoxy(31, 15); cout << "â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜" << endl;
 
 }
 
-//°ÔÀÓ½ÇÇàÈ­¸é
-void StartGame() {
-    thread t1(timer);
-    int songRn= rand() % 5;
-  
-    //³ë·¡ ·£´ı
-    switch (songRn)
-    {
-    case 0:   PlaySound(TEXT("ddd.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
-    case 1:   PlaySound(TEXT("dynamite.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
-    case 2:   PlaySound(TEXT("diveintoyou.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
-    case 3:   PlaySound(TEXT("lovesickgirls.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
-    case 4:   PlaySound(TEXT("whatislove.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+void input() {
+    while (true) {
+
+        if (hcnt == 3) break;
+        DeleteHeart();
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+        gotoxy(37, 10); cout << score << "ì " << endl;
+        n = keyControl(); //ì •ë‹µ ì…ë ¥ 
+
+        switch (n) {
+            // case 27: GameOver(); break; ë¨¹íˆê²Œ í•˜ê¸° ìˆ˜ì •!
+        case LEFT:
+            if (rn == 0 && res >= 20) { score += 10; }
+            else { hcnt++; } break;
+        case RIGHT:
+            if (rn == 1 && res >= 20) { score += 10; }
+            else { hcnt++; } break;
+        case UP:
+            if (rn == 2 && res >= 20) { score += 10; }
+            else { hcnt++; } break;
+        case DOWN:
+            if (rn == 3 && res >= 20) { score += 10; }
+            else { hcnt++; } break;
+        case SPACE:
+            if (rn == 4 && res >= 20) { score += 10; }
+            else { hcnt++; } break;
+        }
+
     }
-    system("cls");
-    gotoxy(20, 10);  cout << "2ÃÊÈÄ ½ÃÀÛ" << endl;
-    Sleep(1000);
-    system("cls");
-    srand((int)time(0));
 
-    //´Ü°è
-        Stage1(40);
-        Stage2(40);
-        Stage3(50);
-        Stage4(55);
-        Stage5(60);
-        GameClear();
-       
-    system("pause>null");
-    t1.join();
 }
-
-//°ÔÀÓÅ¬¸®¾î
-void GameClear() {
-    clear = 0;
-
+//2ì´ˆ ëŒ€ê¸°
+void Wait() {
+    srand((int)time(0));
     system("cls");
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
-    gotoxy(9, 3); cout << " _____   ___  ___  ___ _____   _____  _      _____   ___  ______ " << endl;
-    gotoxy(9, 4);  cout << "|  __ \\ / _ \\ |  \\/  ||  ___| /  __ \\| |    |  ___| / _ \\ | ___ \\" << endl;
-    gotoxy(9, 5); cout << "| |  \\// /_\\ \\| .  . || |__   | /  \\/| |    | |__  / /_\\ \\| |_/ /" << endl;
-    gotoxy(9, 6); cout << "| | __ |  _  || |\\/| ||  __|  | |    | |    |  __| |  _  ||    /  " << endl;
-    gotoxy(9, 7); cout << "| |_\\ \\| | | || |  | || |___  | \\__/\\| |____| |___ | | | || |\\ \\   " << endl;
-    gotoxy(9, 8); cout << " \\____/\\_| |_/\\_|  |_/\\____/   \\____/\\_____/\\____/ \\_| |_/\\_| \\_| " << endl;
-    gotoxy(18, 16);  cout << "¸ğµç ½ºÅ×ÀÌÁö¸¦ ¼º°øÇÏ¼Ì½À´Ï´Ù!" << endl;
-    gotoxy(22, 11);  cout << "ÃÖÁ¾ Á¡¼ö : " << score << endl;
-    gotoxy(15, 18);  cout << "¸ŞÀÎÈ­¸éÀ¸·Î µ¹¾Æ°¡·Á¸é SPACEÅ°¸¦ ´­·¯ÁÖ¼¼¿ä" << endl;
+    gotoxy(18, 3); cout << "  /\\";
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    cout << "      ì§€ê¸ˆ ë¬´ìŠ¨ ê³¡??" << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+    gotoxy(18, 4); cout << "  /\\" << endl;
+    gotoxy(18, 5); cout << ".oï¼¿o" << endl;
+    gotoxy(18, 6);  cout << "( >3<)ã¤â”â˜†â™ª*ã€‚" << endl;
+    gotoxy(18, 7); cout << "âŠ‚ã€€ ãƒ ã€€ã€€ã€€â™ªâ™ª+." << endl;
+    gotoxy(18, 8); cout << "ã—ã…¡ï¼ªã€€ã€€ã€€Â°ã€‚+ *" << endl;
+    int songRn = rand() % 5;
+    string desc = " ë¥¼ ì—°ì£¼ í•´ë³´ì !";
+    //ë…¸ë˜ ëœë¤
+    switch (songRn)
+    {
+    case 0:   SongName = "ë”ë³´ì´ì¦ˆ-D.D.D"; PlaySound(TEXT("ddd.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+    case 1:   SongName = "ë°©íƒ„ì†Œë…„ë‹¨-Dynamite";  PlaySound(TEXT("dynamite.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+    case 2:  SongName = "ì—”ì‹œí‹°ë“œë¦¼-ê³ ë˜";  PlaySound(TEXT("diveintoyou.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+    case 3:   SongName = "ë¸”ë™í•‘í¬-Lovesick Girls"; PlaySound(TEXT("lovesickgirls.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+    case 4:   SongName = "íŠ¸ì™€ì´ìŠ¤-What is love";  PlaySound(TEXT("whatislove.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+    }
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTCYAN);
+    gotoxy(18, 11);  cout << SongName << desc << endl;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+    gotoxy(23, 13);  cout << "ê³§ ì‹œì‘í•©ë‹ˆë‹¤!" << endl;
+    Sleep(2000);
+    system("cls");
+}
+//ê²Œì„ì‹¤í–‰í™”ë©´
+void StartGame() {
+    system("cls");
+    //thread t1(timer);
+    thread input(input);
+
+    Wait();
+    Stage();
+    input.join();
+
     system("pause>null");
-    Reset();
-    main();
+    //t1.join();
 
 }
-//°ÔÀÓ¿À¹ö
+
+
+//ê²Œì„ì˜¤ë²„
 void GameOver() {
     system("cls");
 
@@ -160,280 +173,77 @@ void GameOver() {
     gotoxy(11, 8); cout << " \\____/\\_| |_/\\_|  |_/\\____/   \\___/  \\___/ \\____/ \\_| \\_| " << endl;
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(22, 13);  cout << "ÃÖÁ¾ Á¡¼ö : " << score << endl;
-    gotoxy(15, 18);  cout << "¸ŞÀÎÈ­¸éÀ¸·Î µ¹¾Æ°¡·Á¸é SPACEÅ°¸¦ ´­·¯ÁÖ¼¼¿ä" << endl;
+    gotoxy(22, 13);  cout << "ìµœì¢… ì ìˆ˜ : " << score << endl;
+    gotoxy(15, 18);  cout << "ë©”ì¸í™”ë©´ìœ¼ë¡œ ëŒì•„ê°€ë ¤ë©´ SPACEí‚¤ë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš”" << endl;
     // t1.detach();
     system("pause>null");
     Reset();
     main();
 }
+void note() {
+    srand((int)time(0));
+    int index[4] = { 8,10,12,14 }; //ë…¸íŠ¸ ë–¨ì–´ì§€ëŠ” ìœ„ì¹˜
+    int speed=100;
 
+    while (true) {
+        if (hcnt == 3) break;
+        int i = 5;
+        int irn = (rand() % 4); //ì¸ë±ìŠ¤ ëœë¤
+        rn = (rand() % 5);  //ë°©í–¥í‚¤ ëœë¤
 
-//Á¤´ä ÆÇ´Ü
-// ´Ü°è/ÀÔ·Â°ª/¹®Á¦¼ö/½ÃÀÛÁÂÇ¥
-void Check(int step, int answer[], int max, int x, int y) {
- 
-    int i = 0;
-    int h = DeleteHeartX(); //ÇÏÆ® ÁÂÇ¥ °ª ¼³Á¤
-    while (i < max) {
+        //ì†ë„ ì¡°ì •
+        if (score < 100) { speed = 100; }
+        else if (score < 200) { speed = 80; }
+        else if (score < 300) { speed = 70; }
+        else if (score < 400) { speed = 50; }
+        else if (score < 500) { speed = 30; }
+
+        for (i = 5; i < 22; i++) {
+            res = i;
+            clrRn = rand() % 6;
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
+            gotoxy(i, index[irn]); cout << str[rn] << endl;
+            Sleep(speed);
+            gotoxy(i, index[irn]);  cout << "  " << endl;
+
+        }
+    }
+    GameOver();
+}
+
+void printMap() {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTCYAN);
+    gotoxy(5, 6);
+    cout << SongName << " ì—°ì£¼ì¤‘ â™ª";
+
+    for (int i = 7; i <= 15; i += 2) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-        gotoxy(37, 10);
-        cout << score << "Á¡" << endl;
-        //½Ç¼ö3¹ø Å¸ÀÓ¿À¹ö
-        if (hcnt == 3) {
-            GameOver();
-        }
- 
-        int n = keyControl(); //Á¤´ä ÀÔ·Â
-        //¹æÇâÅ° Á¦°Å
-        if (step == 1) { //1´Ü°è
-            if (i < 19) { gotoxy(x--, y);   cout << " "; }
-            else  if (i < 21) { gotoxy(x, y++);   cout << " "; }
-            else if (i < 50) { gotoxy(x++, y);   cout << " "; }
-        }
-        else  if (step == 2) { //2´Ü°è
-            switch (i / 5)
-            {
-            case 0: gotoxy(x, y++);  cout << " "; break;
-            case 1:  gotoxy(x++, y);  cout << " "; break;
-            case 2:  gotoxy(x, y++);  cout << " "; break;
-            case 3: gotoxy(x++, y);  cout << " "; break;
-            case 4: gotoxy(x, y--);  cout << " "; break;
-            case 5: gotoxy(x++, y);  cout << " "; break;
-            case 6:  gotoxy(x, y++);  cout << " "; break;
-            case 7:  gotoxy(x++, y);  cout << " "; break;
-            }
-        }
-        else  if (step == 3) {
-            if (i < 2) { gotoxy(x, y++);   cout << " "; }
-            else if (i < 8) { gotoxy(x--, y);   cout << " ";; }
-            else if (i < 13) { gotoxy(x, y--);   cout << " "; }
-            else if (i < 22) { gotoxy(x++, y);   cout << " "; }
-            else if (i < 29) { gotoxy(x, y++);   cout << " "; }
-            else if (i < 40) { gotoxy(x--, y);   cout << " "; }
-            else if (i < 50) { gotoxy(x, y--);   cout << " "; }
-        }
-        else if (step == 4) {
-            if (i < 10) { gotoxy(x--, y++);  cout << " "; }
-            else if (i < 12) { gotoxy(x++, y);  cout << " "; }
-            else if (i < 22) { gotoxy(x++, y--);  cout << " "; }
-            else if (i < 24) { gotoxy(x++, y);  cout << " "; }
-            else if (i < 34) { gotoxy(x--, y++);  cout << " "; }
-            else if (i < 36) { gotoxy(x++, y); cout << " "; }
-            else if (i < 46) { gotoxy(x++, y--); cout << " "; }
-            else if (i < 48) { gotoxy(x++, y);  cout << " "; }
-            else if (i < 55) { gotoxy(x++, y++);  cout << " "; }
-        }
-        else if (step == 5) {
-
-            if (i < 8) { gotoxy(x++, y--);  cout << " "; }
-            else if (i < 25) { gotoxy(x++, y);   cout << " "; }
-            else if (i < 37) { gotoxy(x--, y++);  cout << " "; }
-            else if (i < 52) { gotoxy(x--, y);   cout << " "; }
-            else if (i < 54) { gotoxy(x, y--);   cout << " "; }
-            else if (i < 60) { gotoxy(x++, y);   cout << " "; }
-
-        }
-
-        //´ä ÆÇ´Ü
-
-            switch (n) {
-           // case 27: GameOver(); break; ¸ÔÈ÷°Ô ÇÏ±â ¼öÁ¤!
-            case LEFT:
-                if (answer[i] == 0) { score += 10; }
-                else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;
-            case RIGHT:
-                if (answer[i] == 1) { score += 10; }
-                else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;
-            case UP:
-                if (answer[i] == 2) { score += 10; }
-                else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;
-            case DOWN:
-                if (answer[i] == 3) { score += 10; }
-                else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;
-            case SPACE:
-                if (answer[i] == 4) { score += 10; }
-                else { hcnt++;  gotoxy(h--, 3);  cout << " "; } break;  
-        }
-        i++;
+        gotoxy(5, i);
+        cout << "â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– " << endl;
     }
-}
-
-
-
-
-void Stage1(int max) {
-
-    Record(); //Á¡¼ö ±â·ÏÆÇ
-    DeleteHeart(); //ÇÏÆ®¼ö ÆÇ´Ü
-    int answer[40] = { 0, }; //´äÃ¼Å©
-
-    x = 25;  y = 10; //ÃÊ±â À§Ä¡
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x - 1, y - 1);  cout << "START" << endl;
-    gotoxy(4, 2);   cout << "STAGE 1                                                       " << endl;
-
-
-    for (int j = 0; j < max; j++) {  //¹®Á¦ ½ÇÇà
-        clrRn = rand() % 6;
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
-        rn = (rand() % 5); //¹®Á¦ ·£´ı
-        answer[j] = rn; //¹®Á¦ ÀúÀå
-
-        if (j < 19) { gotoxy(x--, y);  cout << str[rn]; }
-        else  if (j < 21) { gotoxy(x, y++);  cout << str[rn]; }
-        else if (j < 50) { gotoxy(x++, y);  cout << str[rn]; }
-
-        //°ñ ÁöÁ¡
-        if (j == 39) {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-            gotoxy(x, y);  cout << "GOAL" << endl;
+    for (int i = 7; i <= 15; i += 2) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
+        gotoxy(20, i);
+        cout << "â– â– â– â– â– ";
+    }
+    for (int i = 8; i <= 14; i += 2) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
+        if (i == 8 || i == 10 || i == 12 || i == 14) {
+            gotoxy(22, i);
+            cout << "â– ";
         }
     }
-    Check(1, answer, 40, 25, 10);
- 
-    system("cls");
+
+
 
 }
-void Stage2(int max) {
-    Record(); //Á¡¼ö ±â·ÏÆÇ
-    DeleteHeart(); //ÇÏÆ®¼ö ÆÇ´Ü
-    int answer[40] = { 0, }; //´äÃ¼Å©
-    x = 5;  y = 5; //ÃÊ±â À§Ä¡
 
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x - 1, y - 1);  cout << "START" << endl;
-    gotoxy(4, 2);   cout << "STAGE 2                                        " << endl; //½ÃÀÛ¹®±¸ »èÁ¦
-
-
-    for (int j = 0; j < max; j++) {  //¹®Á¦ ½ÇÇà
-        clrRn = rand() % 6;
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
-        rn = (rand() % 5); //¹®Á¦ ·£´ı
-        answer[j] = rn; //¹®Á¦ ÀúÀå
-
-        switch (j / 5)
-        {
-        case 0: gotoxy(x, y++);  cout << str[rn]; break;
-        case 1:  gotoxy(x++, y);  cout << str[rn];  break;
-        case 2:  gotoxy(x, y++);  cout << str[rn];  break;
-        case 3: gotoxy(x++, y);  cout << str[rn]; break;
-        case 4: gotoxy(x, y--);  cout << str[rn];  break;
-        case 5: gotoxy(x++, y);  cout << str[rn]; break;
-        case 6:  gotoxy(x, y++);  cout << str[rn]; break;
-        case 7:  gotoxy(x++, y);  cout << str[rn]; break;
-        }
-        //°ñ ÁöÁ¡
-        if (j == 39) {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-            gotoxy(x, y);  cout << "GOAL" << endl;
-        }
-    }
-    Check(2, answer, 40, 5, 5);
-    system("cls");
-}
-void Stage3(int max) {
-    Record(); //Á¡¼ö ±â·ÏÆÇ
-    int answer[50] = { 0, }; //´äÃ¼Å©
-
+void Stage() {
     DeleteHeart();
-    x = 20;  y = 10; //ÃÊ±â À§Ä¡
-
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x - 1, y - 1); cout << "START" << endl; //½ÃÀÛÀ§Ä¡
+    gotoxy(4, 2);   cout << "STAGE " << ++scnt << endl;
+    Record(); //ì ìˆ˜ ê¸°ë¡íŒ
+    printMap();//ë§µ 
+    note(); //ë…¸íŠ¸ ë–¨ì–´ì§€ê¸°
 
-    gotoxy(4, 2);   cout << "STAGE 3" << endl;
-    for (int j = 0; j < max; j++) {  //¹®Á¦ ½ÇÇà
-
-        clrRn = rand() % 6;
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
-        rn = (rand() % 5); //¹®Á¦ ·£´ı
-        answer[j] = rn; //¹®Á¦ ´ä ÀúÀå
-
-        if (j < 2) { gotoxy(x, y++);  cout << str[rn]; }
-        else if (j < 8) { gotoxy(x--, y);  cout << str[rn]; }
-        else if (j < 13) { gotoxy(x, y--);  cout << str[rn]; }
-        else if (j < 22) { gotoxy(x++, y);  cout << str[rn]; }
-        else if (j < 29) { gotoxy(x, y++);  cout << str[rn]; }
-        else if (j < 40) { gotoxy(x--, y);  cout << str[rn]; }
-        else if (j < 50) { gotoxy(x, y--);  cout << str[rn]; }
-
-    }
-    //°ñ ÁöÁ¡
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x--, y--);  cout << "GOAL" << endl;
-    Check(3, answer, 50, 20, 10);
-    system("cls");
-}
-void Stage4(int max) {
-    Record(); //Á¡¼ö ±â·ÏÆÇ
-    int answer[55] = { 0, }; //´äÃ¼Å©
-
-    DeleteHeart();
-    x = 12;  y = 5; //ÃÊ±â À§Ä¡
-
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x - 1, y - 1); cout << "START" << endl; //½ÃÀÛÀ§Ä¡
-
-    gotoxy(4, 2);   cout << "STAGE 4" << endl;
-    for (int j = 0; j < max; j++) {  //¹®Á¦ ½ÇÇà
-
-        clrRn = rand() % 6;
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
-        rn = (rand() % 5); //¹®Á¦ ·£´ı
-        answer[j] = rn; //¹®Á¦ ´ä ÀúÀå
-
-        if (j < 10) { gotoxy(x--, y++);  cout << str[rn]; }
-        else if (j < 12) { gotoxy(x++, y);  cout << str[rn]; }
-        else if (j < 22) { gotoxy(x++, y--);  cout << str[rn]; }
-        else if (j < 24) { gotoxy(x++, y);  cout << str[rn]; }
-        else if (j < 34) { gotoxy(x--, y++);  cout << str[rn]; }
-        else if (j < 36) { gotoxy(x++, y);  cout << str[rn]; }
-        else if (j < 46) { gotoxy(x++, y--);  cout << str[rn]; }
-        else if (j < 48) { gotoxy(x++, y);  cout << str[rn]; }
-        else if (j < 55) { gotoxy(x++, y++);  cout << str[rn]; }
-
-    }
-    //°ñ ÁöÁ¡
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x--, y--);  cout << "GOAL" << endl;
-    // ´Ü°è/¹®Á¦ÆÇ´ÜÀúÀå/¹®Á¦¼ö/½ÃÀÛÇÒÁÂÇ¥
-    Check(4, answer, 55, 12, 5);
-    system("cls");
-}
-void Stage5(int max) {
-    Record(); //Á¡¼ö ±â·ÏÆÇ
-    int answer[60] = { 0, }; //´äÃ¼Å©
-
-    DeleteHeart();
-    x = 4;  y = 13; //ÃÊ±â À§Ä¡
-
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x - 3, y); cout << "START" << endl; //½ÃÀÛÀ§Ä¡
-
-    gotoxy(4, 2);   cout << "STAGE 5" << endl;
-    for (int j = 0; j < max; j++) {  //¹®Á¦ ½ÇÇà
-
-        clrRn = rand() % 6;
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
-        rn = (rand() % 5); //¹®Á¦ ·£´ı
-        answer[j] = rn; //¹®Á¦ ´ä ÀúÀå
-
-        if (j < 8) { gotoxy(x++, y--);  cout << str[rn]; }
-        else if (j < 25) { gotoxy(x++, y);  cout << str[rn]; }
-        else if (j < 37) { gotoxy(x--, y++);  cout << str[rn]; }
-
-        else if (j < 52) { gotoxy(x--, y);  cout << str[rn]; }
-        else if (j < 54) { gotoxy(x, y--);  cout << str[rn]; }
-        else if (j < 60) { gotoxy(x++, y);  cout << str[rn]; }
-
-
-
-    }
-    //°ñ ÁöÁ¡
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(x--, y--);  cout << "GOAL" << endl;
-    // ´Ü°è/¹®Á¦ÆÇ´ÜÀúÀå/¹®Á¦¼ö/½ÃÀÛÇÒÁÂÇ¥
-    Check(5, answer, 60, 4, 13);
-    system("cls");
 }

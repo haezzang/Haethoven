@@ -11,7 +11,7 @@ int cnt = 0;
 
 
 
-void Rank() {
+void Rank_Calc() {
 
 	//데이터 갯수 세기
 	ifstream fin;
@@ -71,7 +71,7 @@ void Rank() {
 
 
 
-void PrintRankTitle() {
+void Rank() {
 	system("cls");
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
 	gotoxy(13, 2); cout << "______   ___   _   _  _   __ _____  _   _  _____ " << endl;
@@ -83,7 +83,7 @@ void PrintRankTitle() {
 
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
 	
-	Rank();
+	Rank_Calc();
 	system("pause>null");
 }
 

@@ -23,8 +23,8 @@ void gotoxy(int x, int y)
 void CursorView()
 {
     CONSOLE_CURSOR_INFO cursorInfo = { 0, };
-    cursorInfo.dwSize = 1; //커서 굵기 (1 ~ 100)
-    cursorInfo.bVisible = FALSE; //커서 Visible TRUE(보임) FALSE(숨김)
+    cursorInfo.dwSize = 1;
+    cursorInfo.bVisible = FALSE; //커서 숨기깅
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }
 
@@ -183,7 +183,7 @@ int main(void) {
         Title();
         switch (Menu()) {
         case 0: Info(); break; //게임시작
-        case 2: PrintRankTitle(); break; //랭킹보기
+        case 2: Rank(); break; //랭킹보기
         case 4: exit(0);  break; // 게임종료
         }
        

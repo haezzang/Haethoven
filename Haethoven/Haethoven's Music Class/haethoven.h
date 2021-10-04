@@ -43,29 +43,19 @@ enum Color
 
 
 //함수 정의
-void PrintRankTitle(); //랭킹회면
+void Rank(); //랭킹회면
 void Info(); //정보화면
 void Title(); //게임제목
 int Menu(); //메뉴선택
-void Check(int,int,int,int,int); //게임점수 판단
 void StartGame(); //게임화면
 void Record(); //게임 점수 기록판
 int keyControl(); //입력값 
-void Stage1(int); //맵1 
-void Stage2(int); //맵2
-void Stage3(int); //맵2
-void Stage4(int); //맵2
-void Stage5(int); //맵2
-void GameClear();
+void Stage(); 
 void GameOver(); //게임오버
 int main(); //메인
 
-
-
-
 //좌표함수
 void gotoxy(int x, int y);
-
 //커서 없애는 함수
 void CursorView();
 
