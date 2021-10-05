@@ -52,7 +52,13 @@ void Record(); //게임 점수 기록판
 int keyControl(); //입력값 
 void Stage(); 
 void GameOver(); //게임오버
+void GameClear(); //게임오버
 int main(); //메인
+void Reset();//초기화
+void StartBonus(); 
+void BonusStage(int);
+void DeleteHeart();
+void B_GameOver(); //보너스 게임오버
 
 //좌표함수
 void gotoxy(int x, int y);

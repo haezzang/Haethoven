@@ -2,13 +2,10 @@
 #include <thread>
 using namespace std;
 
-
-
-
 //전역변수
 int tt; //타이머
 int hcnt = 0; //실수 횟수
-int scnt = 0; //스테이지 단계
+int scnt = 1; //스테이지 단계
 string heart = "♥ ♥ ♥";
 extern string name; //유저 네임
 int score = 0; //점수
@@ -22,10 +19,7 @@ int songRn;//노래 랜덤
 int clr[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
 int clrRn;//컬러 랜덤 인덱스
 string str[5] = { "←","→","↑","↓","●" };
-
-
-
-
+int h = 0;//하트좌표
 
 //점수 저장
 void Save() {
@@ -37,13 +31,15 @@ void Save() {
 
 
 void DeleteHeart() { //하트제거
-    if (hcnt == 0) { heart = "♥ ♥ ♥"; }
-    else if (hcnt == 1) { heart = "♥ ♥      "; }
+    if (hcnt == 0) { heart = "♥ ♥ ♥";  }
+    else if (hcnt == 1) { heart = "♥ ♥  "; }
     else if (hcnt == 2) { heart = " ♥     "; }
+    else if (hcnt >=3) { heart = "       "; }
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
     gotoxy(4, 3);   cout << heart << endl;
 
 }
+
 
 //void timer() {
 //    Sleep(2000);
@@ -81,10 +77,11 @@ void Record() {
 }
 
 void input() {
+    //하트 좌표 값 설정
     while (true) {
-
+      
         if (hcnt == 3) break;
-        DeleteHeart();
+      
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
         gotoxy(37, 10); cout << score << "점" << endl;
         n = keyControl(); //정답 입력 
@@ -93,19 +90,19 @@ void input() {
             // case 27: GameOver(); break; 먹히게 하기 수정!
         case LEFT:
             if (rn == 0 && res >= 20) { score += 10; }
-            else { hcnt++; } break;
+            else { hcnt++;    DeleteHeart();  } break;
         case RIGHT:
             if (rn == 1 && res >= 20) { score += 10; }
-            else { hcnt++; } break;
+            else { hcnt++;     DeleteHeart(); } break;
         case UP:
             if (rn == 2 && res >= 20) { score += 10; }
-            else { hcnt++; } break;
+            else { hcnt++;   DeleteHeart();  } break;
         case DOWN:
             if (rn == 3 && res >= 20) { score += 10; }
-            else { hcnt++; } break;
+            else { hcnt++;     DeleteHeart(); } break;
         case SPACE:
             if (rn == 4 && res >= 20) { score += 10; }
-            else { hcnt++; } break;
+            else { hcnt++;     DeleteHeart(); } break;
         }
 
     }
@@ -144,6 +141,8 @@ void Wait() {
     Sleep(2000);
     system("cls");
 }
+
+
 //게임실행화면
 void StartGame() {
     system("cls");
@@ -153,7 +152,7 @@ void StartGame() {
     Wait();
     Stage();
     input.join();
-
+   
     system("pause>null");
     //t1.join();
 
@@ -177,26 +176,28 @@ void GameOver() {
     gotoxy(15, 18);  cout << "메인화면으로 돌아가려면 SPACE키를 눌러주세요" << endl;
     // t1.detach();
     system("pause>null");
-    Reset();
-    main();
+    StartBonus();
 }
+
 void note() {
     srand((int)time(0));
     int index[4] = { 8,10,12,14 }; //노트 떨어지는 위치
     int speed=100;
 
     while (true) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+        gotoxy(4, 2);   cout << "STAGE " << scnt << endl;
         if (hcnt == 3) break;
         int i = 5;
         int irn = (rand() % 4); //인덱스 랜덤
         rn = (rand() % 5);  //방향키 랜덤
 
         //속도 조정
-        if (score < 100) { speed = 100; }
-        else if (score < 200) { speed = 80; }
-        else if (score < 300) { speed = 70; }
-        else if (score < 400) { speed = 50; }
-        else if (score < 500) { speed = 30; }
+        if (score<100) { speed = 100; }
+        else if (score>=100 && score<200) { speed = 80; scnt=2; }
+        else if (score >= 200 && score <300) { speed = 70; scnt=3;  }
+        else if (score >= 300 && score <400) { speed = 50; scnt=4;  }
+        else if (score >= 400 && score <500) { speed = 30; scnt=5;  }
 
         for (i = 5; i < 22; i++) {
             res = i;
@@ -215,7 +216,9 @@ void printMap() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTCYAN);
     gotoxy(5, 6);
     cout << SongName << " 연주중 ♪";
-
+    gotoxy(20, 6);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+    cout << "PUSH!";
     for (int i = 7; i <= 15; i += 2) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
         gotoxy(5, i);
@@ -241,7 +244,6 @@ void printMap() {
 void Stage() {
     DeleteHeart();
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(4, 2);   cout << "STAGE " << ++scnt << endl;
     Record(); //점수 기록판
     printMap();//맵 
     note(); //노트 떨어지기
