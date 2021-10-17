@@ -3,7 +3,7 @@
 using namespace std;
 
 //전역변수
-int tt; //타이머
+int ct; //타이머
 int hcnt = 0; //실수 횟수
 int scnt = 1; //스테이지 단계
 string heart = "♥ ♥ ♥";
@@ -41,16 +41,15 @@ void DeleteHeart() { //하트제거
 }
 
 
-//void timer() {
-//    Sleep(2000);
-//    tt = 0;
-//    while (hcnt==3){
-//        gotoxy(37, 13); cout << tt++<< "초  ";
-//        Sleep(1000);
-//       
-//    }
-//
-//}
+void countdown() {
+    ct = 0;
+   while (hcnt!=3){
+        Sleep(1000);    
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+        gotoxy(37, 13); cout << ct++ << "초  ";
+   }
+   system("cls");
+}
 
 //정보리셋
 void Reset() {
@@ -68,10 +67,11 @@ void Record() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BLUE);
     gotoxy(36, 9); cout << "S C O R E" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    gotoxy(37, 10); cout << score << "점" << endl;
+   //gotoxy(37, 10); cout << score << "점" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BROWN);
-    gotoxy(36, 12); cout << "제한 시간" << endl;
+    gotoxy(36, 12); cout << "걸린 시간" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+
     gotoxy(31, 15); cout << "└────────────────────────────┘" << endl;
 
 }
@@ -103,6 +103,7 @@ void input() {
         case SPACE:
             if (rn == 4 && res >= 20) { score += 10; }
             else { hcnt++;     DeleteHeart(); } break;
+        default : hcnt++;     DeleteHeart();  break;
         }
 
     }
@@ -137,8 +138,8 @@ void Wait() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTCYAN);
     gotoxy(18, 11);  cout << SongName << desc << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
-    gotoxy(23, 13);  cout << "곧 시작합니다!" << endl;
-    Sleep(2000);
+    gotoxy(23, 13);  cout << "1초후 시작합니다!" << endl;
+    Sleep(1000);
     system("cls");
 }
 
@@ -146,15 +147,15 @@ void Wait() {
 //게임실행화면
 void StartGame() {
     system("cls");
-    //thread t1(timer);
+    thread countdown(countdown);
     thread input(input);
 
     Wait();
     Stage();
     input.join();
-   
+    countdown.join();
     system("pause>null");
-    //t1.join();
+  
 
 }
 
@@ -193,10 +194,10 @@ void note() {
         rn = (rand() % 5);  //방향키 랜덤
 
         //속도 조정
-        if (score<100) { speed = 100; }
-        else if (score>=100 && score<200) { speed = 80; scnt=2; }
-        else if (score >= 200 && score <300) { speed = 70; scnt=3;  }
-        else if (score >= 300 && score <400) { speed = 50; scnt=4;  }
+        if (score<100) { speed = 80; }
+        else if (score>=100 && score<200) { speed = 65; scnt=2; }
+        else if (score >= 200 && score <300) { speed = 50; scnt=3;  }
+        else if (score >= 300 && score <400) { speed = 40; scnt=4;  }
         else if (score >= 400 && score <500) { speed = 30; scnt=5;  }
 
         for (i = 5; i < 22; i++) {
