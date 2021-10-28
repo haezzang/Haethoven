@@ -48,7 +48,7 @@ void Info(); //정보화면
 void Title(); //게임제목
 int Menu(); //메뉴선택
 void StartGame(); //게임화면
-void Record(); //게임 점수 기록판
+void Record(int); //게임 점수 기록판
 int keyControl(); //입력값 
 void Stage(); 
 void GameOver(); //게임오버

@@ -35,7 +35,7 @@ void Rank_Calc() {
 			}
 		}
 		else {
-			cout << "파일을 찾을 수 없습니다!" <<endl;
+			cout << "파일이 존재하지 않습니다!" <<endl;
 		}
 		f.close();
 

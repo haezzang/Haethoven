@@ -36,20 +36,11 @@ void DeleteHeart() { //하트제거
     else if (hcnt == 2) { heart = " ♥     "; }
     else if (hcnt >=3) { heart = "       "; }
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
-    gotoxy(4, 3);   cout << heart << endl;
+    gotoxy(5, 4);   cout << heart << endl;
 
 }
 
 
-void countdown() {
-    ct = 0;
-   while (hcnt!=3){
-        Sleep(1000);    
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-        gotoxy(37, 13); cout << ct++ << "초  ";
-   }
-   system("cls");
-}
 
 //정보리셋
 void Reset() {
@@ -57,10 +48,11 @@ void Reset() {
     x = 5; y = 5; //초기좌표 다시 설정
     score = 0;
     hcnt = 0;  //점수, 실수 초기화
+    main();
 }
 
 //점수판과 제한시간
-void Record() {
+void Record(int chk) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     gotoxy(31, 6); cout << "> " << name << " < 게임중" << endl;
     gotoxy(31, 7); cout << "┌────────────────────────────┐" << endl;
@@ -68,44 +60,48 @@ void Record() {
     gotoxy(36, 9); cout << "S C O R E" << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
    //gotoxy(37, 10); cout << score << "점" << endl;
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BROWN);
-    gotoxy(36, 12); cout << "걸린 시간" << endl;
+  
+    if (chk == 0) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+        gotoxy(36, 12); cout << "남은 시간"<< endl;
+    }
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
 
     gotoxy(31, 15); cout << "└────────────────────────────┘" << endl;
 
 }
 
+
+
+
 void input() {
     //하트 좌표 값 설정
+;
     while (true) {
-      
         if (hcnt == 3) break;
-      
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
         gotoxy(37, 10); cout << score << "점" << endl;
-        n = keyControl(); //정답 입력 
-
+        n = keyControl(); //정답 입력
+        if (n == 10) { hcnt++;     DeleteHeart(); }
         switch (n) {
             // case 27: GameOver(); break; 먹히게 하기 수정!
         case LEFT:
-            if (rn == 0 && res >= 20) { score += 10; }
+            if (rn == 0 && res >= 18) { score += 10; }
             else { hcnt++;    DeleteHeart();  } break;
         case RIGHT:
-            if (rn == 1 && res >= 20) { score += 10; }
+            if (rn == 1 && res >= 18) { score += 10; }
             else { hcnt++;     DeleteHeart(); } break;
         case UP:
-            if (rn == 2 && res >= 20) { score += 10; }
+            if (rn == 2 && res >= 18) { score += 10; }
             else { hcnt++;   DeleteHeart();  } break;
         case DOWN:
-            if (rn == 3 && res >= 20) { score += 10; }
+            if (rn == 3 && res >= 18) { score += 10; }
             else { hcnt++;     DeleteHeart(); } break;
         case SPACE:
-            if (rn == 4 && res >= 20) { score += 10; }
+            if (rn == 4 && res >= 18) { score += 10; }
             else { hcnt++;     DeleteHeart(); } break;
-        default : hcnt++;     DeleteHeart();  break;
-        }
 
+        }
     }
 
 }
@@ -138,8 +134,8 @@ void Wait() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTCYAN);
     gotoxy(18, 11);  cout << SongName << desc << endl;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
-    gotoxy(23, 13);  cout << "1초후 시작합니다!" << endl;
-    Sleep(1000);
+    gotoxy(23, 13);  cout << "1초후 시작합니다." << endl;
+    Sleep(2000);
     system("cls");
 }
 
@@ -147,13 +143,11 @@ void Wait() {
 //게임실행화면
 void StartGame() {
     system("cls");
-    thread countdown(countdown);
     thread input(input);
 
     Wait();
-    Stage();
+    Stage();      
     input.join();
-    countdown.join();
     system("pause>null");
   
 
@@ -177,7 +171,13 @@ void GameOver() {
     gotoxy(15, 18);  cout << "메인화면으로 돌아가려면 SPACE키를 눌러주세요" << endl;
     // t1.detach();
     system("pause>null");
-    StartBonus();
+
+    int b_rnd;
+    
+    b_rnd= (rand() % 2);
+
+    if(b_rnd==0) StartBonus();
+    else Reset();
 }
 
 void note() {
@@ -186,8 +186,10 @@ void note() {
     int speed=100;
 
     while (true) {
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-        gotoxy(4, 2);   cout << "STAGE " << scnt << endl;
+
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+        gotoxy(36, 12); cout << "스테이지 "; 
+        gotoxy(37, 13); SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE); cout<< scnt <<"단계"<< endl;
         if (hcnt == 3) break;
         int i = 5;
         int irn = (rand() % 4); //인덱스 랜덤
@@ -199,8 +201,12 @@ void note() {
         else if (score >= 200 && score <300) { speed = 50; scnt=3;  }
         else if (score >= 300 && score <400) { speed = 40; scnt=4;  }
         else if (score >= 400 && score <500) { speed = 30; scnt=5;  }
+        else if (score >= 500 && score < 600) { speed = 20; scnt = 6; }
+        else if (score >= 600 && score < 700) { speed = 10; scnt = 7; }
+
 
         for (i = 5; i < 22; i++) {
+            if (hcnt == 3) break;
             res = i;
             clrRn = rand() % 6;
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr[clrRn]);
@@ -211,24 +217,25 @@ void note() {
         }
     }
     GameOver();
+
 }
 
 void printMap() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTCYAN);
-    gotoxy(5, 6);
+    gotoxy(5, 2);
     cout << SongName << " 연주중 ♪";
-    gotoxy(20, 6);
+    gotoxy(19, 6);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
     cout << "PUSH!";
     for (int i = 7; i <= 15; i += 2) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
         gotoxy(5, i);
-        cout << "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" << endl;
+        cout << "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" << endl;
     }
     for (int i = 7; i <= 15; i += 2) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
-        gotoxy(20, i);
-        cout << "■■■■■";
+        gotoxy(18, i);
+        cout << "■■■■■■■";
     }
     for (int i = 8; i <= 14; i += 2) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
@@ -245,7 +252,7 @@ void printMap() {
 void Stage() {
     DeleteHeart();
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-    Record(); //점수 기록판
+    Record(1); //점수 기록판
     printMap();//맵 
     note(); //노트 떨어지기
 
