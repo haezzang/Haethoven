@@ -178,6 +178,7 @@ void Info() {
 int main(void) {
 
     CursorView();
+    system("title 해토벤");
     system("mode con: cols=100 lines=22"); //가로 세로 콘솔크기 추가
     while (true) {
         Title();

@@ -22,16 +22,15 @@ bool over = 1;
 
 
 void timer() {
-    tt= 10;
+    tt= 9;
+
     while (over) {
         if (hcnt == 3 || tt==0) break;
-        
         Sleep(1000);
         gotoxy(37, 13); cout << tt << "ÃÊ  ";
         tt -- ;
 
     }
-
 
 
 

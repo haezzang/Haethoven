@@ -21,7 +21,7 @@ void Rank_Calc() {
 	{
 		if (getline(fin, line)) cnt++;
 	} 
-	cout << "참여자 수:"<<cnt << endl;
+	gotoxy(1, 1); cout << "플레이어 수:" << cnt << endl;
 	fin.close();
 
 
